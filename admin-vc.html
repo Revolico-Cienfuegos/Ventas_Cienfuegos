@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -57,6 +57,7 @@ button{cursor:pointer;font-family:inherit;}
 .item-cat{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dorado);margin-bottom:2px;}
 .item-nombre{font-size:14px;font-weight:700;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .item-precio{font-size:12.5px;color:var(--dorado);margin-top:2px;}
+.item-stock{font-size:11px;color:var(--suave);margin-top:1px;}
 .item-btns{display:flex;gap:6px;flex-shrink:0;}
 .btn-sm{border:1.5px solid var(--linea);background:transparent;color:var(--texto);font-size:12px;padding:6px 10px;border-radius:6px;font-family:inherit;}
 .btn-del{border:1.5px solid var(--rojo);background:transparent;color:var(--rojo);width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;}
@@ -79,7 +80,7 @@ button{cursor:pointer;font-family:inherit;}
 .sep{height:1px;background:var(--linea);margin:20px 0;}
 
 /* CONTADORES */
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
 .stat{background:#fff;border:1px solid var(--linea);border-radius:10px;padding:14px;text-align:center;}
 .stat-n{font-size:24px;font-weight:800;color:var(--azul);}
 .stat-l{font-size:11px;color:var(--suave);text-transform:uppercase;letter-spacing:.06em;}
@@ -179,6 +180,12 @@ button{cursor:pointer;font-family:inherit;}
       </div>
     </div>
 
+    <!-- CAMPO STOCK -->
+    <div class="form-group">
+      <label class="lbl">Stock disponible</label>
+      <input type="number" class="input" id="campoStock" placeholder="Cantidad en inventario" value="0" min="0">
+    </div>
+
     <div class="form-group">
       <label class="lbl">Descripción</label>
       <textarea class="textarea" id="campoDescripcion" placeholder="Características, especificaciones, estado, garantía..."></textarea>
@@ -244,9 +251,11 @@ function guardarLocal(){ localStorage.setItem(LS, JSON.stringify(productos)); }
 function renderStats(){
   const total = productos.length;
   const cats = new Set(productos.map(p=>p.categoria)).size;
+  const stockTotal = productos.reduce((acc,p) => acc + (parseInt(p.stock)||0), 0);
   document.getElementById("stats").innerHTML=`
     <div class="stat"><div class="stat-n">${total}</div><div class="stat-l">Productos</div></div>
     <div class="stat"><div class="stat-n">${cats}</div><div class="stat-l">Categorías</div></div>
+    <div class="stat"><div class="stat-n">${stockTotal}</div><div class="stat-l">Stock total</div></div>
   `;
 }
 
@@ -277,6 +286,7 @@ function renderLista(filtro="todas"){
         <div class="item-cat">${catIco(p.categoria)} ${catNombre(p.categoria)}</div>
         <div class="item-nombre">${p.nombre||"(sin nombre)"}</div>
         <div class="item-precio">${fmt(p.precio,p.moneda)}</div>
+        <div class="item-stock">📦 Stock: ${p.stock!==undefined?p.stock:0}</div>
       </div>
       <div class="item-btns">
         <button class="btn-sm" data-id="${p.id}">✏️</button>
@@ -309,6 +319,7 @@ function abrirForm(p){
   document.getElementById("campoNombre").value=p?(p.nombre||""):"";
   document.getElementById("campoPrecio").value=p?(p.precio||""):"";
   document.getElementById("campoMoneda").value=p?(p.moneda||"USD"):"USD";
+  document.getElementById("campoStock").value=p?(p.stock!==undefined?p.stock:0):0;
   document.getElementById("campoDescripcion").value=p?(p.descripcion||""):"";
   const av=document.getElementById("avisoArchivo");
   av.style.display="none"; av.innerHTML="";
@@ -364,6 +375,7 @@ document.getElementById("guardarBtn").addEventListener("click",()=>{
     categoria:cat, nombre,
     precio:document.getElementById("campoPrecio").value.trim(),
     moneda:document.getElementById("campoMoneda").value.trim(),
+    stock:parseInt(document.getElementById("campoStock").value) || 0,
     descripcion:document.getElementById("campoDescripcion").value.trim(),
     imagen:imagenActual,
   };
@@ -384,3 +396,4 @@ document.getElementById("descargarBtn").addEventListener("click",()=>{
 </script>
 </body>
 </html>
+

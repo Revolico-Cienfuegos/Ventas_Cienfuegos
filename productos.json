@@ -1,1 +1,22 @@
-[]
+﻿[
+  {
+    "id": "p_1710000000000",
+    "categoria": "solar",
+    "nombre": "Panel solar 200W monocristalino",
+    "precio": "85",
+    "moneda": "USD",
+    "stock": 12,
+    "descripcion": "Panel solar de alta eficiencia, 200W, 12V. Ideal para sistemas de respaldo.",
+    "imagen": "imagenes/panel-solar-200w.jpg"
+  },
+  {
+    "id": "p_1710000000001",
+    "categoria": "moviles",
+    "nombre": "Cargador portátil 20000mAh",
+    "precio": "45",
+    "moneda": "USD",
+    "stock": 4,
+    "descripcion": "Batería externa con doble salida USB, carga rápida.",
+    "imagen": "imagenes/cargador-portatil.jpg"
+  }
+]
