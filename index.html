@@ -345,7 +345,7 @@ function renderCarrito(){
 
   body.innerHTML = carrito.map(item => `
     <div class="cart-item">
-      ${item.imagen ? `<img class="cart-item-img" src="${item.imagen}" alt="${item.nombre}" loading="lazy">` : `<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🖼️</div>`}
+      ${item.imagen ? `<img class="cart-item-img" src="${item.imagen}" alt="${item.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'cart-item-img\\' style=\\'display:flex;align-items:center;justify-content:center;font-size:20px;\\'>🖼️</div>'">` : `<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🖼️</div>`}
       <div class="cart-item-info">
         <div class="cart-item-nombre">${item.nombre}</div>
         <div class="cart-item-precio">${fmt(item.precio, item.moneda)}</div>
@@ -443,8 +443,8 @@ function cardHTML(p, idx, mostrarTag=false){
   const hasImg = p.imagen && p.imagen.length > 0;
   const imgSrc = hasImg ? p.imagen : "";
   const imgWrap = `<div class="card-img-wrap">
-    ${hasImg ? `<img class="card-img" src="${imgSrc}" alt="${p.nombre}" loading="lazy" decoding="async" data-idx="${idx}" onerror="this.style.display='none'; this.parentElement.querySelector('.card-img-ph').style.display='flex';">` : ''}
-    <div class="card-img-ph" style="display:${hasImg ? 'none' : 'flex'};" data-idx="${idx}">${IMG_PH_ICO}<span>Sin foto</span></div>
+    ${hasImg ? `<img class="card-img" src="${imgSrc}" alt="${p.nombre}" loading="lazy" decoding="async" data-idx="${idx}" onerror="console.warn('Imagen no encontrada:', this.src); this.style.display='none'; this.parentElement.querySelector('.card-img-ph').style.display='flex'; this.parentElement.querySelector('.card-img-ph span').textContent='❌ Imagen no disponible'; this.parentElement.querySelector('.card-img-ph small').textContent='${imgSrc}';">` : ''}
+    <div class="card-img-ph" style="display:${hasImg ? 'none' : 'flex'};" data-idx="${idx}">${IMG_PH_ICO}<span>Sin foto</span><small style="font-size:8px;opacity:0.5;word-break:break-all;">${hasImg ? imgSrc : ''}</small></div>
   </div>`;
 
   const precio = p.precio ? `<div class="card-precio">${fmt(p.precio, p.moneda)}</div>` : `<div class="card-precio" style="font-size:12px;color:var(--suave2);">Consultar</div>`;
@@ -626,14 +626,14 @@ function abrirModal(p){
   document.getElementById("mStock").innerHTML = stockHTML;
   document.getElementById("mDesc").textContent = p.descripcion||"";
 
-  // Imagen con placeholder robusto
+  // Imagen con placeholder robusto y consola de error
   const hasImg = p.imagen && p.imagen.length > 0;
   const imgSrc = hasImg ? p.imagen : "";
   const wrap = document.getElementById("mImgWrap");
   wrap.innerHTML = `
     <div style="position:relative;">
-      ${hasImg ? `<img class="modal-img" src="${imgSrc}" alt="${p.nombre}" loading="lazy" onerror="this.style.display='none'; this.parentElement.querySelector('.modal-img-ph').style.display='flex';">` : ''}
-      <div class="modal-img-ph" style="display:${hasImg ? 'none' : 'flex'};">${IMG_PH_ICO}</div>
+      ${hasImg ? `<img class="modal-img" src="${imgSrc}" alt="${p.nombre}" loading="lazy" onerror="console.warn('Modal: imagen no encontrada:', this.src); this.style.display='none'; this.parentElement.querySelector('.modal-img-ph').style.display='flex'; this.parentElement.querySelector('.modal-img-ph span').textContent='❌ Imagen no disponible'; this.parentElement.querySelector('.modal-img-ph small').textContent='${imgSrc}';"` : ''}
+      <div class="modal-img-ph" style="display:${hasImg ? 'none' : 'flex'};">${IMG_PH_ICO}<span>Sin foto</span><small style="font-size:9px;opacity:0.5;word-break:break-all;">${hasImg ? imgSrc : ''}</small></div>
     </div>
   `;
 
