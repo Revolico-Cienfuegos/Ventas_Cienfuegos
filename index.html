@@ -33,7 +33,7 @@
 
   <style>
     /* ================================================================ */
-    /* ===== ESTILOS COMPLETOS ===== */
+    /* ===== ESTILOS COMPLETOS (copiados de tu style.css pero embebidos) ===== */
     /* ================================================================ */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -934,6 +934,12 @@
   <div id="vacio" class="empty" style="display:none;">
     <div class="ico">🛍️</div>
     <div>Todavía no hay productos publicados.</div>
+  </div>
+  <div id="errorCarga" class="empty" style="display:none;">
+    <div class="ico">⚠️</div>
+    <div style="font-weight:600; margin-bottom:6px;">No se pudieron cargar los productos.</div>
+    <div style="font-size:13px; color:var(--text-secondary);" id="errorMensaje"></div>
+    <button onclick="recargarProductos()" style="margin-top:12px; padding:8px 20px; background:#0a1a2b; color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">Recargar productos</button>
   </div>
 </main>
 
@@ -1867,55 +1873,81 @@ window.addEventListener('scroll', ajustarTopCategorias);
 })();
 
 // ================================================================
-//  CARGA DE PRODUCTOS
+//  CARGA DE PRODUCTOS (CORREGIDA)
 // ================================================================
-function cargarProductos(){
-  const local = localStorage.getItem("vc_admin_productos");
-  if(local) {
-    try {
-      const datos = JSON.parse(local);
-      if(Array.isArray(datos) && datos.length > 0) {
-        DATA = datos;
-        buildCatsNav();
-        renderizarContenido();
-        console.log("✅ Productos cargados desde localStorage (fallback)");
-        return;
-      }
-    } catch(e) {}
-  }
+function cargarProductos() {
+  const skeletons = document.getElementById("skeletons");
+  const vacio = document.getElementById("vacio");
+  const errorDiv = document.getElementById("errorCarga");
+  const errorMsg = document.getElementById("errorMensaje");
 
+  // Ocultar todo al inicio
+  skeletons.style.display = "block";
+  vacio.style.display = "none";
+  errorDiv.style.display = "none";
+  document.getElementById("contenido").style.display = "none";
+  document.getElementById("contenidoGarantia").style.display = "none";
+
+  // 1. Intentar fetch con control de caché
   const url = "productos.json?_=" + Date.now();
-  fetch(url, { 
-    cache: "no-store",
-    headers: { "Cache-Control": "no-cache" }
+  console.log("🔄 Cargando productos desde:", url);
+
+  fetch(url, {
+    cache: "no-cache",
+    headers: {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
+    }
   })
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-      return res.json();
-    })
-    .then(data => {
-      if (Array.isArray(data) && data.length > 0) {
-        DATA = data;
-        localStorage.setItem("vc_admin_productos", JSON.stringify(DATA));
-        buildCatsNav();
-        renderizarContenido();
-        console.log("✅ Productos cargados desde el servidor");
-      } else {
-        throw new Error("El archivo productos.json está vacío o no es válido");
-      }
-    })
-    .catch(err => {
-      console.error("❌ Error cargando productos:", err);
-      document.getElementById("skeletons").style.display = "none";
-      document.getElementById("vacio").style.display = "block";
-      document.getElementById("vacio").innerHTML = `
-        <div class="ico">⚠️</div>
-        <div style="font-weight:600; margin-bottom:6px;">No se pudieron cargar los productos.</div>
-        <div style="font-size:13px; color:var(--text-secondary);">Verifica tu conexión o que el archivo <code>productos.json</code> exista en el servidor.</div>
-        <div style="font-size:12px; margin-top:8px; color:var(--text-muted);">Error: ${err.message || "Desconocido"}</div>
-        <button onclick="location.reload()" style="margin-top:12px; padding:8px 20px; background:#0a1a2b; color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">Recargar</button>
-      `;
-    });
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+    }
+    return res.json();
+  })
+  .then(data => {
+    if (Array.isArray(data) && data.length > 0) {
+      DATA = data;
+      localStorage.setItem("vc_admin_productos", JSON.stringify(DATA));
+      console.log(`✅ Productos cargados desde el servidor (${DATA.length} items)`);
+      skeletons.style.display = "none";
+      buildCatsNav();
+      renderizarContenido();
+    } else {
+      throw new Error("El archivo productos.json está vacío o no es válido");
+    }
+  })
+  .catch(err => {
+    console.error("❌ Error cargando productos:", err);
+    // Intentar recuperar de localStorage
+    const local = localStorage.getItem("vc_admin_productos");
+    if (local) {
+      try {
+        const datos = JSON.parse(local);
+        if (Array.isArray(datos) && datos.length > 0) {
+          DATA = datos;
+          console.warn("⚠️ Usando respaldo de localStorage (productos antiguos)");
+          skeletons.style.display = "none";
+          buildCatsNav();
+          renderizarContenido();
+          toast("⚠️ No se pudo actualizar, mostrando versión guardada", "error");
+          return;
+        }
+      } catch (e) {}
+    }
+    // Si todo falla, mostrar error
+    skeletons.style.display = "none";
+    errorDiv.style.display = "block";
+    errorMsg.textContent = `Error: ${err.message || "No se pudo cargar productos.json. Verifica que el archivo exista en la misma carpeta que index.html."}`;
+    document.getElementById("vacio").style.display = "none";
+  });
+}
+
+// Función para recargar manualmente (usada en el botón)
+function recargarProductos() {
+  document.getElementById("errorCarga").style.display = "none";
+  cargarProductos();
 }
 
 // ================================================================
