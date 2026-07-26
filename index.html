@@ -564,18 +564,6 @@
     .card-badge.badge-nuevo {
       background: linear-gradient(135deg, #2e9bff, #1257c9);
     }
-    /* ===== TENDENCIAS ===== */
-    .tend-intro {
-      padding: 4px 4px 14px;
-      color: var(--text-secondary);
-      font-size: 13.5px;
-    }
-    .tend-empty {
-      text-align: center;
-      padding: 30px 16px;
-      color: var(--text-muted);
-      font-size: 13.5px;
-    }
     .card-body {
       padding: 8px 12px 12px;
       flex: 1;
@@ -1508,7 +1496,6 @@ const TASAS = {
 const CATEGORIAS = [
   { id:"garantia-domicilio", nombre:"Garantía y Domicilio", ico:"🛡️", especial:true },
   { id:"todas",              nombre:"Todos",                  ico:"🏪", especial:false },
-  { id:"tendencias",         nombre:"Tendencias",             ico:"🔥", especial:false },
   { id:"electricidad",       nombre:"Electricidad y Protección", ico:"⚡" },
   { id:"solar",              nombre:"Energía Solar y Respaldo",  ico:"☀️" },
   { id:"moviles",            nombre:"Dispositivos Móviles y Carga Portátil", ico:"📱" },
@@ -2018,14 +2005,6 @@ function bloquesTendencias(){
   return html;
 }
 
-function renderTendencias(){
-  const bloques = bloquesTendencias();
-  if (!bloques) {
-    return `<div class="tend-empty">🔥 Todavía no hay productos marcados como "Más vendido" o "Nuevo".<br>Márcalos desde el panel de administración.</div>`;
-  }
-  return `<div class="tend-intro">Lo que más le gusta a nuestros clientes y las últimas novedades del catálogo.</div>` + bloques;
-}
-
 function renderizarContenido(){
   const contenido = document.getElementById("contenido");
   const contenidoGarantia = document.getElementById("contenidoGarantia");
@@ -2042,14 +2021,6 @@ function renderizarContenido(){
   if (catActiva === "garantia-domicilio") {
     contenidoGarantia.style.display = "block";
     contenidoGarantia.innerHTML = renderGarantiaDomicilio();
-    aplicarProteccionImagenes();
-    return;
-  }
-
-  if (catActiva === "tendencias") {
-    contenido.style.display = "block";
-    contenido.innerHTML = renderTendencias();
-    bindCards(contenido);
     aplicarProteccionImagenes();
     return;
   }
