@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>VENTACIEN · Tienda Online</title>
 
-  <!-- ===== ANTI-CACHE (siempre descargar versión nueva) ===== -->
+  <!-- ===== ANTI-CACHE ===== -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
-  <!-- ===== MANIFEST (con versión para forzar actualización) ===== -->
+  <!-- ===== MANIFEST (sin Service Worker) ===== -->
   <link rel="manifest" href="manifest.json?v=3">
   <meta name="theme-color" content="#0a1a2b">
   <meta name="mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
 
   <style>
     /* ================================================================ */
-    /* ===== ESTILOS COMPLETOS (copiados de tu style.css pero embebidos) ===== */
+    /* ===== ESTILOS COMPLETOS (igual que antes) ===== */
     /* ================================================================ */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -1839,56 +1839,22 @@ window.addEventListener('resize', ajustarTopCategorias);
 window.addEventListener('scroll', ajustarTopCategorias);
 
 // ================================================================
-//  ACTUALIZACIÓN AUTOMÁTICA SIN SERVICE WORKER
-//  (comprueba si el HTML ha cambiado cada 30 segundos y recarga)
+//  CARGA DE PRODUCTOS (VERSIÓN DEFINITIVA)
 // ================================================================
-(function autoUpdate() {
-  const VERSION_KEY = 'ventacien_version';
-  const currentVersion = document.querySelector('meta[name="theme-color"]')?.content + Date.now().toString(36);
-  
-  if (!localStorage.getItem(VERSION_KEY)) {
-    localStorage.setItem(VERSION_KEY, currentVersion);
-    return;
-  }
+let currentHash = ''; // Almacena un hash del contenido para detectar cambios
 
-  setInterval(() => {
-    fetch(window.location.href + '?v=' + Date.now(), {
-      method: 'HEAD',
-      cache: 'no-store'
-    })
-    .then(res => {
-      const lastModified = res.headers.get('Last-Modified');
-      const etag = res.headers.get('ETag');
-      const storedVersion = localStorage.getItem(VERSION_KEY);
-      if (lastModified && storedVersion !== lastModified) {
-        localStorage.setItem(VERSION_KEY, lastModified);
-        window.location.reload(true);
-      } else if (etag && storedVersion !== etag) {
-        localStorage.setItem(VERSION_KEY, etag);
-        window.location.reload(true);
-      }
-    })
-    .catch(() => {});
-  }, 30000);
-})();
-
-// ================================================================
-//  CARGA DE PRODUCTOS (CORREGIDA)
-// ================================================================
 function cargarProductos() {
   const skeletons = document.getElementById("skeletons");
   const vacio = document.getElementById("vacio");
   const errorDiv = document.getElementById("errorCarga");
   const errorMsg = document.getElementById("errorMensaje");
 
-  // Ocultar todo al inicio
   skeletons.style.display = "block";
   vacio.style.display = "none";
   errorDiv.style.display = "none";
   document.getElementById("contenido").style.display = "none";
   document.getElementById("contenidoGarantia").style.display = "none";
 
-  // 1. Intentar fetch con control de caché
   const url = "productos.json?_=" + Date.now();
   console.log("🔄 Cargando productos desde:", url);
 
@@ -1901,13 +1867,22 @@ function cargarProductos() {
     }
   })
   .then(res => {
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-    }
+    if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
     return res.json();
   })
   .then(data => {
     if (Array.isArray(data) && data.length > 0) {
+      // Calcular un hash simple del contenido (para detectar cambios)
+      const newHash = JSON.stringify(data);
+      if (newHash !== currentHash) {
+        currentHash = newHash;
+        // Si ya teníamos datos y cambió, recargamos la página automáticamente
+        if (DATA.length > 0) {
+          console.log("🔄 ¡Productos actualizados! Recargando página...");
+          window.location.reload();
+          return;
+        }
+      }
       DATA = data;
       localStorage.setItem("vc_admin_productos", JSON.stringify(DATA));
       console.log(`✅ Productos cargados desde el servidor (${DATA.length} items)`);
@@ -1936,7 +1911,6 @@ function cargarProductos() {
         }
       } catch (e) {}
     }
-    // Si todo falla, mostrar error
     skeletons.style.display = "none";
     errorDiv.style.display = "block";
     errorMsg.textContent = `Error: ${err.message || "No se pudo cargar productos.json. Verifica que el archivo exista en la misma carpeta que index.html."}`;
@@ -1944,10 +1918,42 @@ function cargarProductos() {
   });
 }
 
-// Función para recargar manualmente (usada en el botón)
+// Función para recargar manualmente
 function recargarProductos() {
   document.getElementById("errorCarga").style.display = "none";
   cargarProductos();
+}
+
+// ================================================================
+//  ACTUALIZACIÓN AUTOMÁTICA (cada 30 segundos)
+// ================================================================
+setInterval(() => {
+  // Solo si la página está visible, para no recargar innecesariamente
+  if (!document.hidden) {
+    const url = "productos.json?_=" + Date.now();
+    fetch(url, { cache: "no-cache" })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          const newHash = JSON.stringify(data);
+          if (newHash !== currentHash) {
+            console.log("🔄 ¡Cambios detectados en productos.json! Recargando...");
+            window.location.reload();
+          }
+        }
+      })
+      .catch(() => {});
+  }
+}, 30000);
+
+// ================================================================
+//  DESACTIVAR SERVICE WORKER (para evitar caché)
+// ================================================================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    registrations.forEach(reg => reg.unregister());
+    console.log("✅ Service Worker desregistrado para evitar caché.");
+  });
 }
 
 // ================================================================
