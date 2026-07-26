@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>VENTACIEN · Tienda Online</title>
 
-  <!-- ===== ANTI-CACHE ===== -->
+  <!-- ===== ANTI-CACHE EXTREMO ===== -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -31,6 +31,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icon-192.png">
 
+  <!-- ===== ESTILOS (completos) ===== -->
   <style>
     /* ================================================================ */
     /* ===== ESTILOS COMPLETOS (igual que antes) ===== */
@@ -1839,9 +1840,9 @@ window.addEventListener('resize', ajustarTopCategorias);
 window.addEventListener('scroll', ajustarTopCategorias);
 
 // ================================================================
-//  CARGA DE PRODUCTOS (VERSIÓN DEFINITIVA)
+//  CARGA DE PRODUCTOS (VERSIÓN DEFINITIVA CON LOGS DETALLADOS)
 // ================================================================
-let currentHash = ''; // Almacena un hash del contenido para detectar cambios
+let currentHash = ''; 
 
 function cargarProductos() {
   const skeletons = document.getElementById("skeletons");
@@ -1855,8 +1856,8 @@ function cargarProductos() {
   document.getElementById("contenido").style.display = "none";
   document.getElementById("contenidoGarantia").style.display = "none";
 
-  const url = "productos.json?_=" + Date.now();
-  console.log("🔄 Cargando productos desde:", url);
+  const url = "productos.json?t=" + Date.now();
+  console.log("🔄 Intentando cargar productos desde:", url);
 
   fetch(url, {
     cache: "no-cache",
@@ -1867,16 +1868,18 @@ function cargarProductos() {
     }
   })
   .then(res => {
-    if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+    console.log("📡 Respuesta del servidor:", res.status, res.statusText);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+    }
     return res.json();
   })
   .then(data => {
+    console.log("📦 Datos recibidos del JSON:", data.length, "productos");
     if (Array.isArray(data) && data.length > 0) {
-      // Calcular un hash simple del contenido (para detectar cambios)
       const newHash = JSON.stringify(data);
       if (newHash !== currentHash) {
         currentHash = newHash;
-        // Si ya teníamos datos y cambió, recargamos la página automáticamente
         if (DATA.length > 0) {
           console.log("🔄 ¡Productos actualizados! Recargando página...");
           window.location.reload();
@@ -1885,16 +1888,17 @@ function cargarProductos() {
       }
       DATA = data;
       localStorage.setItem("vc_admin_productos", JSON.stringify(DATA));
-      console.log(`✅ Productos cargados desde el servidor (${DATA.length} items)`);
+      console.log(`✅ Productos cargados correctamente (${DATA.length} items)`);
       skeletons.style.display = "none";
       buildCatsNav();
       renderizarContenido();
+      toast("Productos actualizados", "success");
     } else {
       throw new Error("El archivo productos.json está vacío o no es válido");
     }
   })
   .catch(err => {
-    console.error("❌ Error cargando productos:", err);
+    console.error("❌ Error en la carga:", err.message);
     // Intentar recuperar de localStorage
     const local = localStorage.getItem("vc_admin_productos");
     if (local) {
@@ -1913,7 +1917,7 @@ function cargarProductos() {
     }
     skeletons.style.display = "none";
     errorDiv.style.display = "block";
-    errorMsg.textContent = `Error: ${err.message || "No se pudo cargar productos.json. Verifica que el archivo exista en la misma carpeta que index.html."}`;
+    errorMsg.textContent = `Error: ${err.message}. Verifica que el archivo productos.json exista en la misma carpeta que index.html y que sea accesible.`;
     document.getElementById("vacio").style.display = "none";
   });
 }
@@ -1928,9 +1932,8 @@ function recargarProductos() {
 //  ACTUALIZACIÓN AUTOMÁTICA (cada 30 segundos)
 // ================================================================
 setInterval(() => {
-  // Solo si la página está visible, para no recargar innecesariamente
   if (!document.hidden) {
-    const url = "productos.json?_=" + Date.now();
+    const url = "productos.json?t=" + Date.now();
     fetch(url, { cache: "no-cache" })
       .then(res => res.json())
       .then(data => {
@@ -1951,9 +1954,18 @@ setInterval(() => {
 // ================================================================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(registrations => {
-    registrations.forEach(reg => reg.unregister());
-    console.log("✅ Service Worker desregistrado para evitar caché.");
+    registrations.forEach(reg => {
+      reg.unregister();
+      console.log("✅ Service Worker desregistrado:", reg.scope);
+    });
   });
+  // También intentamos limpiar la caché del SW
+  if (caches) {
+    caches.keys().then(names => {
+      names.forEach(name => caches.delete(name));
+      console.log("🗑️ Cachés del Service Worker limpiadas");
+    });
+  }
 }
 
 // ================================================================
