@@ -194,6 +194,15 @@ button{cursor:pointer;font-family:inherit;}
       <textarea class="textarea" id="campoDescripcion" placeholder="Características, especificaciones, estado, garantía..."></textarea>
     </div>
 
+    <div class="form-group">
+      <label class="lbl">Etiqueta (pestaña "Tendencias" de la tienda)</label>
+      <select class="input" id="campoEtiqueta">
+        <option value="">Ninguna</option>
+        <option value="mas_vendido">🔥 Más vendido</option>
+        <option value="nuevo">🆕 Nuevo</option>
+      </select>
+    </div>
+
     <button class="btn btn-azul" id="guardarBtn">Guardar producto</button>
     <div class="sep"></div>
     <button class="btn-outline" id="cancelarBtn">Cancelar</button>
@@ -344,7 +353,7 @@ function renderLista(){
     <div class="item">
       ${imgHtml}
       <div class="item-info">
-        <div class="item-cat">${catIco(p.categoria)} ${catNombre(p.categoria)}</div>
+        <div class="item-cat">${catIco(p.categoria)} ${catNombre(p.categoria)}${p.etiqueta==="mas_vendido"?' · 🔥 Más vendido':p.etiqueta==="nuevo"?' · 🆕 Nuevo':''}</div>
         <div class="item-nombre">${p.nombre||"(sin nombre)"}</div>
         <div class="item-precio">${fmt(p.precio,p.moneda)}</div>
       </div>
@@ -384,6 +393,7 @@ function abrirForm(p){
   document.getElementById("campoPrecio").value=p?(p.precio||""):"";
   document.getElementById("campoMoneda").value=p?(p.moneda||"USD"):"USD";
   document.getElementById("campoDescripcion").value=p?(p.descripcion||""):"";
+  document.getElementById("campoEtiqueta").value=p?(p.etiqueta||""):"";
   const av=document.getElementById("avisoArchivo");
   av.style.display="none"; av.innerHTML="";
   actualizarPicker(p&&p.imagen?p.imagen:null);
@@ -445,6 +455,7 @@ document.getElementById("guardarBtn").addEventListener("click",()=>{
     precio:document.getElementById("campoPrecio").value.trim(),
     moneda:document.getElementById("campoMoneda").value.trim(),
     descripcion:document.getElementById("campoDescripcion").value.trim(),
+    etiqueta:document.getElementById("campoEtiqueta").value,
     imagen:imagenActual,
   };
   const idx=productos.findIndex(p=>p.id===datos.id);
