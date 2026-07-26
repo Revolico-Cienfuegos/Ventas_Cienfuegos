@@ -1,4 +1,5 @@
-const CACHE = "vc-v15"; // Cambia este número en cada actualización
+// sw.js (versión v15)
+const CACHE = "vc-v15";
 
 const ASSETS = [
   "./index.html",
@@ -24,7 +25,6 @@ self.addEventListener("activate", e => {
   );
 });
 
-// Escuchar mensajes para forzar la activación
 self.addEventListener("message", e => {
   if (e.data === "SKIP_WAITING") {
     self.skipWaiting();
@@ -34,7 +34,8 @@ self.addEventListener("message", e => {
 self.addEventListener("fetch", e => {
   const url = e.request.url;
 
-  if (url.includes('index.html') || url.includes('admin-') || url.includes('productos.json')) {
+  // Si es productos.json, siempre ir a la red y actualizar caché
+  if (url.includes('productos.json')) {
     e.respondWith(
       fetch(e.request, { cache: "no-store" })
         .then(res => {
@@ -47,6 +48,7 @@ self.addEventListener("fetch", e => {
     return;
   }
 
+  // Resto de recursos (imágenes, etc.)
   if (url.includes("/imagenes/")) {
     e.respondWith(
       caches.match(e.request).then(cached => {
