@@ -1,7 +1,8 @@
-const CACHE = "vc-v5"; // Cambio de versión para forzar actualización
+const CACHE = "vc-v14"; // Cambia este número en cada actualización
+
 const ASSETS = [
   "./index.html",
-  "./admin-vc.html",
+  "./admin-ventacien-seguro-7x9k2.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png"
@@ -23,30 +24,29 @@ self.addEventListener("activate", e => {
   );
 });
 
+// Escuchar mensajes para forzar la activación
+self.addEventListener("message", e => {
+  if (e.data === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener("fetch", e => {
   const url = e.request.url;
 
-  // Para productos.json: siempre ir a la red, y si falla, devolver un array vacío
-  if (url.includes("productos.json")) {
+  if (url.includes('index.html') || url.includes('admin-') || url.includes('productos.json')) {
     e.respondWith(
       fetch(e.request, { cache: "no-store" })
         .then(res => {
-          // Clonar y cachear para futuros fallos
           const clone = res.clone();
           caches.open(CACHE).then(c => c.put(e.request, clone));
           return res;
         })
-        .catch(() => {
-          // Si la red falla, devolver un JSON vacío en lugar de error
-          return new Response(JSON.stringify([]), {
-            headers: { "Content-Type": "application/json" }
-          });
-        })
+        .catch(() => caches.match(e.request))
     );
     return;
   }
 
-  // Para imágenes: caché primero, luego red
   if (url.includes("/imagenes/")) {
     e.respondWith(
       caches.match(e.request).then(cached => {
@@ -61,7 +61,6 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // Para el resto: caché primero, red como fallback
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );
