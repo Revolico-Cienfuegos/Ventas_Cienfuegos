@@ -1986,7 +1986,7 @@ function renderGarantiaDomicilio() {
 // ============================================================
 //  RENDERIZADO PRINCIPAL
 // ============================================================
-function renderTendencias(){
+function bloquesTendencias(){
   const vendidos = [];
   const nuevos = [];
   DATA.forEach((p, idx) => {
@@ -1994,12 +1994,7 @@ function renderTendencias(){
     else if (p.etiqueta === "nuevo") nuevos.push({ p, idx });
   });
 
-  if (!vendidos.length && !nuevos.length) {
-    return `<div class="tend-empty">🔥 Todavía no hay productos marcados como "Más vendido" o "Nuevo".<br>Márcalos desde el panel de administración.</div>`;
-  }
-
-  let html = `<div class="tend-intro">Lo que más le gusta a nuestros clientes y las últimas novedades del catálogo.</div>`;
-
+  let html = "";
   if (vendidos.length){
     html += `<section class="seccion" id="cat-tend-vendidos">
       <div class="seccion-header">
@@ -2010,7 +2005,6 @@ function renderTendencias(){
       <div class="grid">${vendidos.map(({p, idx}) => cardHTML(p, idx, true)).join("")}</div>
     </section>`;
   }
-
   if (nuevos.length){
     html += `<section class="seccion" id="cat-tend-nuevos">
       <div class="seccion-header">
@@ -2021,8 +2015,15 @@ function renderTendencias(){
       <div class="grid">${nuevos.map(({p, idx}) => cardHTML(p, idx, true)).join("")}</div>
     </section>`;
   }
-
   return html;
+}
+
+function renderTendencias(){
+  const bloques = bloquesTendencias();
+  if (!bloques) {
+    return `<div class="tend-empty">🔥 Todavía no hay productos marcados como "Más vendido" o "Nuevo".<br>Márcalos desde el panel de administración.</div>`;
+  }
+  return `<div class="tend-intro">Lo que más le gusta a nuestros clientes y las últimas novedades del catálogo.</div>` + bloques;
 }
 
 function renderizarContenido(){
@@ -2083,7 +2084,8 @@ function renderizarContenido(){
   const orden = CATEGORIAS.filter(c => c.id !== "garantia-domicilio" && c.id !== "todas").map(c => c.id).filter(id => porCat[id]);
 
   contenido.style.display = "block";
-  contenido.innerHTML = orden.map(catId => {
+  const tendenciasPrevias = (catActiva === "todas") ? bloquesTendencias() : "";
+  contenido.innerHTML = tendenciasPrevias + orden.map(catId => {
     const cat = CATEGORIAS.find(c => c.id === catId);
     const items = porCat[catId];
     return `<section class="seccion" id="cat-${catId}">
@@ -2344,7 +2346,7 @@ function cargarProductos(){
     })
     .then(data => {
       if (Array.isArray(data) && data.length > 0) {
-        DATA = data;
+        DATA = data.filter(p => !p.agotado);
         buildCatsNav();
         renderizarContenido();
         console.log("✅ Productos cargados desde el servidor");
