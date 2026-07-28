@@ -1981,6 +1981,14 @@ function bloquesTendencias(){
     else if (p.etiqueta === "nuevo") nuevos.push({ p, idx });
   });
 
+  // El más reciente agregado siempre va primero en "Lo Nuevo",
+  // sin importar el orden en que quedó guardado en el archivo.
+  nuevos.sort((a, b) => {
+    const ta = parseInt((a.p.id.match(/\d+/) || ["0"])[0], 10);
+    const tb = parseInt((b.p.id.match(/\d+/) || ["0"])[0], 10);
+    return tb - ta;
+  });
+
   let html = "";
   if (vendidos.length){
     html += `<section class="seccion" id="cat-tend-vendidos">
