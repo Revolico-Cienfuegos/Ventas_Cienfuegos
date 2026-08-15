@@ -1,10 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// IMPORTANTE: cambiá "doris-ai" por el nombre EXACTO de tu repositorio en GitHub
-// si el repo se llama distinto. Si tu repo es "usuario.github.io" (repo de usuario),
-// dejá base: "/"
+// base relativa: funciona en GitHub Pages sin importar el nombre del repo
+// (usuario.github.io/CUALQUIER-NOMBRE/) y también en local.
 export default defineConfig({
   plugins: [react()],
-  base: "/doris-ai/",
+  base: "./",
 });
