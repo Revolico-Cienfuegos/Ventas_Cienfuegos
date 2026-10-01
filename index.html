@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>VENTACIEN · Tienda Online</title>
-  <!-- ===== OPEN GRAPH / VISTA PREVIA AL COMPARTIR ===== -->
+    <!-- ===== OPEN GRAPH / VISTA PREVIA AL COMPARTIR ===== -->
 <meta property="og:title" content="VENTACIEN · Tienda Online">
 <meta property="og:description" content="Todo lo que necesitas, cerca de ti. Catálogo de productos con envío a domicilio en Cienfuegos.">
 <meta property="og:image" content="https://revolico-cienfuegos.github.io/Catalogo-de-ventas/imagenes/logo-tienda.png">
@@ -361,19 +361,27 @@
     }
 
     /* ===== CATEGORÍAS NAV ===== */
-    .cats-scroll {
+    .cats-wrap {
       background: #fff;
       border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
       z-index: 50;
-      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+    }
+    .cats-scroll {
+      flex: 1;
+      min-width: 0;
       overflow-x: auto;
       overflow-y: hidden;
       white-space: nowrap;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
+      position: relative;
     }
     .cats-scroll::-webkit-scrollbar {
       display: none;
@@ -381,7 +389,44 @@
     .cats-inner {
       display: inline-flex;
       gap: 4px;
-      padding: 8px 0;
+      padding: 4px 0;
+    }
+    .cats-arrow {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      transition: all var(--transition);
+      padding-bottom: 3px;
+      user-select: none;
+    }
+    .cats-arrow:hover:not(:disabled) {
+      background: var(--navy-light);
+      transform: scale(1.06);
+    }
+    .cats-arrow:active:not(:disabled) {
+      transform: scale(0.92);
+    }
+    .cats-arrow:disabled,
+    .cats-arrow.hidden {
+      opacity: 0.22;
+      pointer-events: none;
+    }
+    @media (max-width: 480px) {
+      .cats-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+      }
     }
     .cat-btn {
       display: inline-flex;
@@ -1326,7 +1371,8 @@
       <div class="moneda-selector">
         <select id="currencySelect">
           <option value="USD" selected>USD</option>
-          <option value="MN">MN (675)</option>
+          <option value="MN">MN (770)</option>
+          <option value="Transferencia">Transferencia (800)</option>
           <option value="Zelle">Zelle (1.05)</option>
           <option value="Tarjeta">Tarjeta (1.1)</option>
           <option value="Euro">Euro (0.93)</option>
@@ -1356,9 +1402,13 @@
 </div>
 
 <!-- ===== CATEGORÍAS ===== -->
-<nav class="cats-scroll" id="catsNav" style="display:none;">
-  <div class="cats-inner" id="catsInner"></div>
-</nav>
+<div class="cats-wrap" id="catsWrap" style="display:none;">
+  <button class="cats-arrow" id="catsArrowLeft" aria-label="Categorías anteriores">‹</button>
+  <nav class="cats-scroll" id="catsNav">
+    <div class="cats-inner" id="catsInner"></div>
+  </nav>
+  <button class="cats-arrow" id="catsArrowRight" aria-label="Más categorías">›</button>
+</div>
 
 <!-- ===== MAIN ===== -->
 <main class="main">
@@ -1501,7 +1551,8 @@ const WA = "5354571729";
 
 const TASAS = {
   USD: 1,
-  MN: 675,
+  MN: 770,
+  Transferencia: 800,
   Zelle: 1.05,
   Tarjeta: 1.1,
   Euro: 0.93
@@ -1521,7 +1572,7 @@ const CATEGORIAS = [
   { id:"miscelaneos",        nombre:"Misceláneos y Hogar",       ico:"🏠" },
   // NUEVAS CATEGORÍAS
   { id:"ecoflow",            nombre:"Ecoflow",                   ico:"⚡" },
-  { id:"motorinas",          nombre:"Motorinas Eléctricas",      ico:"🛵" },
+  { id:"motorinas",          nombre:"Vehículos",      ico:"🛵" },
 ];
 
 const WA_ICO = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.85L.057 23.5l5.797-1.52A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.85 0-3.583-.497-5.073-1.365l-.363-.215-3.44.902.917-3.349-.236-.375A9.957 9.957 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>`;
@@ -2205,9 +2256,10 @@ function renderBusqueda(q){
 //  CATEGORÍAS NAV
 // ============================================================
 function buildCatsNav(){
+  const wrap = document.getElementById("catsWrap");
   const nav = document.getElementById("catsNav");
   const inner = document.getElementById("catsInner");
-  nav.style.display="block";
+  wrap.style.display = "flex";
 
   inner.innerHTML = CATEGORIAS.map(c =>
     `<button class="cat-btn ${catActiva === c.id ? 'active' : ''}" data-cat="${c.id}" style="scroll-snap-align:start;">
@@ -2232,8 +2284,38 @@ function buildCatsNav(){
     });
   });
 
-  nav.style.scrollSnapType = 'x mandatory';
-  nav.style.webkitOverflowScrolling = 'touch';
+  // ===== Flechas de desplazamiento =====
+  const btnLeft  = document.getElementById("catsArrowLeft");
+  const btnRight = document.getElementById("catsArrowRight");
+
+  const SCROLL_STEP = 220;
+
+  btnLeft.addEventListener("click", () => {
+    nav.scrollBy({ left: -SCROLL_STEP, behavior: "smooth" });
+  });
+  btnRight.addEventListener("click", () => {
+    nav.scrollBy({ left: SCROLL_STEP, behavior: "smooth" });
+  });
+
+  function updateArrows(){
+    const maxScroll = nav.scrollWidth - nav.clientWidth;
+    const noOverflow = maxScroll <= 4;
+    if (noOverflow) {
+      btnLeft.classList.add("hidden");
+      btnRight.classList.add("hidden");
+      return;
+    }
+    btnLeft.classList.remove("hidden");
+    btnRight.classList.remove("hidden");
+    btnLeft.disabled  = nav.scrollLeft <= 2;
+    btnRight.disabled = nav.scrollLeft >= maxScroll - 2;
+  }
+
+  nav.addEventListener("scroll", updateArrows, { passive: true });
+  window.addEventListener("resize", updateArrows);
+  // Llamada inicial (con pequeño delay para que el layout esté listo)
+  setTimeout(updateArrows, 60);
+  setTimeout(updateArrows, 400);
 }
 
 // ============================================================
@@ -2316,7 +2398,7 @@ document.getElementById("modal").addEventListener("touchmove",e=>{ if(e.touches[
 // ============================================================
 function ajustarTopCategorias() {
   const header = document.querySelector('.site-header');
-  const cats = document.getElementById('catsNav');
+  const cats = document.getElementById('catsWrap');
   if (header && cats) {
     const headerHeight = header.offsetHeight;
     cats.style.top = headerHeight + 'px';
