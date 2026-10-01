@@ -1680,6 +1680,11 @@ const WA_ICO = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentCol
 const IMG_PH_ICO = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`;
 
 // ============================================================
+//  CONFIG: DÍAS QUE DURA LA ETIQUETA "NUEVO"
+// ============================================================
+const DIAS_NUEVO = 7;
+
+// ============================================================
 //  FUNCIONES AUXILIARES
 // ============================================================
 function limpiarNombreParaOrdenar(nombre) {
@@ -1704,6 +1709,27 @@ function porcentajeDescuento(p){
   const po = parseFloat(p.precio_original);
   const pf = parseFloat(p.precio);
   return Math.round(((po - pf) / po) * 100);
+}
+
+// ============================================================
+//  ETIQUETA "NUEVO" CON EXPIRACIÓN A LOS 7 DÍAS
+// ============================================================
+// Reglas:
+//  - Si p.etiqueta !== "nuevo" → nunca es nuevo.
+//  - Si p.fecha_agregado NO existe → se considera nuevo siempre
+//    (compatibilidad con productos que no tienen fecha).
+//  - Si p.fecha_agregado SÍ existe → es nuevo solo si han pasado
+//    MENOS de DIAS_NUEVO días desde esa fecha.
+function esNuevo(p){
+  if (!p || p.etiqueta !== "nuevo") return false;
+  if (!p.fecha_agregado) return true;
+  const fecha = new Date(p.fecha_agregado);
+  if (isNaN(fecha.getTime())) return true; // fecha inválida → por seguridad, mantener como nuevo
+  const ahora = new Date();
+  const diffMs = ahora.getTime() - fecha.getTime();
+  if (diffMs < 0) return true; // fecha en el futuro → se considera nuevo
+  const diasTranscurridos = diffMs / (1000 * 60 * 60 * 24);
+  return diasTranscurridos < DIAS_NUEVO;
 }
 
 // ============================================================
@@ -2191,7 +2217,7 @@ function bloquesTendencias(){
   DATA.forEach((p, idx) => {
     if (tieneDescuento(p)) ofertas.push({ p, idx });
     if (p.etiqueta === "mas_vendido") vendidos.push({ p, idx });
-    else if (p.etiqueta === "nuevo") nuevos.push({ p, idx });
+    else if (esNuevo(p)) nuevos.push({ p, idx });  // ← Solo si sigue siendo nuevo (<7 días)
   });
 
   // El más reciente agregado siempre va primero en "Lo Nuevo"
@@ -2351,7 +2377,7 @@ function renderizarContenido(){
 // ============================================================
 function badgeHTML(p){
   if (p.etiqueta === "mas_vendido") return `<div class="card-badge badge-vendido">🔥 Más vendido</div>`;
-  if (p.etiqueta === "nuevo") return `<div class="card-badge badge-nuevo">🆕 Nuevo</div>`;
+  if (esNuevo(p)) return `<div class="card-badge badge-nuevo">🆕 Nuevo</div>`;  // ← Solo si sigue siendo nuevo
   return "";
 }
 
@@ -2489,12 +2515,10 @@ function buildCatsNav(){
       nav.scrollTo({ left: scrollLeft, behavior: 'smooth' });
 
       // ===== Scroll al primer producto de la categoría =====
-      // (después de que el DOM se haya renderizado)
       setTimeout(() => {
         if (catActiva === "garantia-domicilio") {
           scrollAlInicio();
         } else if (catActiva === "todas") {
-          // Ir al inicio del catálogo agrupado (arriba del todo)
           scrollAlInicio();
         } else if (catActiva === "ofertas") {
           scrollToSeccion("cat-ofertas");
@@ -2534,7 +2558,6 @@ function buildCatsNav(){
 
   nav.addEventListener("scroll", updateArrows, { passive: true });
   window.addEventListener("resize", updateArrows);
-  // Llamada inicial (con pequeño delay para que el layout esté listo)
   setTimeout(updateArrows, 60);
   setTimeout(updateArrows, 400);
 }
@@ -2663,9 +2686,6 @@ if (window.caches) {
 //  CARGA DE PRODUCTOS
 // ============================================================
 function cargarProductos(){
-  // Siempre se pide la versión más reciente al servidor (nada de caché
-  // ni de localStorage como fuente principal) para que, en cuanto se
-  // actualice productos.json, todo el que la vea con internet la reciba.
   const url = "productos.json?_=" + Date.now();
   fetch(url, { 
     cache: "no-store",
