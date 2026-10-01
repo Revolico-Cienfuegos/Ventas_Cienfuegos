@@ -61,6 +61,9 @@
       --radius-sm: 8px;
       --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --red: #c0392b;
+      --red-light: #e6391a;
+      --green: #1a8a4a;
     }
     html {
       scroll-behavior: smooth;
@@ -455,6 +458,19 @@
       background: var(--gray-bg);
       border-color: var(--border-color);
     }
+    .cat-btn.cat-btn-ofertas {
+      border-color: #e6391a;
+      color: #e6391a;
+    }
+    .cat-btn.cat-btn-ofertas.active {
+      background: linear-gradient(135deg, #e6391a, #ff6a2f);
+      color: #fff;
+      border-color: #e6391a;
+    }
+    .cat-btn.cat-btn-ofertas:hover:not(.active) {
+      background: #fff3f0;
+      border-color: #e6391a;
+    }
 
     /* ===== MAIN CONTENT ===== */
     .main {
@@ -516,6 +532,12 @@
       font-weight: 500;
       margin-left: auto;
     }
+    .seccion.seccion-ofertas .seccion-header {
+      border-bottom-color: #e6391a;
+    }
+    .seccion.seccion-ofertas .seccion-titulo {
+      color: #c0392b;
+    }
 
     /* ===== GRID ===== */
     .grid {
@@ -546,6 +568,13 @@
       box-shadow: var(--shadow-hover);
       transform: translateY(-3px);
       border-color: var(--gold);
+    }
+    .card.card-rebajado {
+      border-color: #e6391a;
+    }
+    .card.card-rebajado:hover {
+      box-shadow: 0 8px 30px rgba(230,57,26,0.22);
+      border-color: #e6391a;
     }
     .card-img-wrap {
       position: relative;
@@ -622,6 +651,19 @@
       bottom: 8px;
       left: 8px;
     }
+    /* Badge de descuento estilo Amazon (-X%) */
+    .card-badge.badge-descuento {
+      top: 8px;
+      right: 8px;
+      left: auto;
+      background: linear-gradient(135deg, #e6391a, #ff6a2f);
+      font-size: 12px;
+      font-weight: 900;
+      padding: 5px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 12px rgba(230,57,26,0.45);
+    }
     .card-body {
       padding: 8px 12px 12px;
       flex: 1;
@@ -641,10 +683,37 @@
       min-height: 34px;
       cursor: pointer;
     }
+    /* Precio normal */
     .card-precio {
       font-size: 17px;
       font-weight: 800;
       color: var(--navy);
+    }
+    /* Precio rebajado estilo Amazon */
+    .card-precio-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .card-precio.rebajado {
+      color: #c0392b;
+      font-size: 18px;
+    }
+    .card-precio-original {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .card-descuento-txt {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #c0392b;
+      background: #fdecec;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
     }
     .card-actions {
       display: flex;
@@ -822,6 +891,36 @@
       font-weight: 800;
       color: var(--navy);
       margin-bottom: 10px;
+    }
+    .modal-precio-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .modal-precio-wrap .modal-precio {
+      margin-bottom: 0;
+    }
+    .modal-precio-wrap .modal-precio.rebajado {
+      color: #c0392b;
+      font-size: 26px;
+    }
+    .modal-precio-original {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .modal-descuento-badge {
+      background: linear-gradient(135deg, #e6391a, #ff6a2f);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 3px 10px rgba(230,57,26,0.35);
     }
     .modal-desc {
       font-size: 14px;
@@ -1467,7 +1566,7 @@
     <div class="modal-body">
       <div class="modal-tag" id="mTag"></div>
       <h2 class="modal-nombre" id="mNombre"></h2>
-      <div class="modal-precio" id="mPrecio"></div>
+      <div id="mPrecioWrap"></div>
       <div id="mDomicilio" style="font-size:13px;font-weight:600;margin-bottom:8px;"></div>
       <p class="modal-desc" id="mDesc"></p>
       <button class="modal-pedir" id="mPedir">
@@ -1560,6 +1659,7 @@ const TASAS = {
 
 const CATEGORIAS = [
   { id:"garantia-domicilio", nombre:"Garantía y Domicilio", ico:"🛡️", especial:true },
+  { id:"ofertas",            nombre:"Ofertas",               ico:"🔥", especial:true },
   { id:"todas",              nombre:"Todos",                  ico:"🏪", especial:false },
   { id:"electricidad",       nombre:"Electricidad y Protección", ico:"⚡" },
   { id:"solar",              nombre:"Energía Solar y Respaldo",  ico:"☀️" },
@@ -1589,6 +1689,21 @@ function limpiarNombreParaOrdenar(nombre) {
     .replace(/[🔥⭐✅🚚🛡️💵💳❗ℹ️]/g, '')
     .trim()
     .toLowerCase();
+}
+
+// Detecta si un producto tiene descuento (precio_original > precio)
+function tieneDescuento(p){
+  const po = parseFloat(p.precio_original);
+  const pf = parseFloat(p.precio);
+  return !isNaN(po) && !isNaN(pf) && po > pf && po > 0;
+}
+
+// Calcula el porcentaje de descuento (ej: 25)
+function porcentajeDescuento(p){
+  if (!tieneDescuento(p)) return 0;
+  const po = parseFloat(p.precio_original);
+  const pf = parseFloat(p.precio);
+  return Math.round(((po - pf) / po) * 100);
 }
 
 // ============================================================
@@ -1709,6 +1824,21 @@ function trackEvent(category, action, label, value){
       'value': value || undefined
     });
   }
+}
+
+// Scroll a una sección compensando el header y la barra de categorías pegajosas
+function scrollToSeccion(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  const header = document.querySelector('.site-header');
+  const catsWrap = document.getElementById('catsWrap');
+  const offset = (header?.offsetHeight || 0) + (catsWrap?.offsetHeight || 0) + 12;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
+
+function scrollAlInicio(){
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ============================================================
@@ -2048,23 +2178,43 @@ function domicilioBadgeHTML(p) {
   return "";
 }
 
+function descuentoBadgeHTML(p){
+  if (!tieneDescuento(p)) return "";
+  const pct = porcentajeDescuento(p);
+  return `<div class="card-badge badge-descuento">-${pct}%</div>`;
+}
+
 function bloquesTendencias(){
   const vendidos = [];
   const nuevos = [];
+  const ofertas = [];
   DATA.forEach((p, idx) => {
+    if (tieneDescuento(p)) ofertas.push({ p, idx });
     if (p.etiqueta === "mas_vendido") vendidos.push({ p, idx });
     else if (p.etiqueta === "nuevo") nuevos.push({ p, idx });
   });
 
-  // El más reciente agregado siempre va primero en "Lo Nuevo",
-  // sin importar el orden en que quedó guardado en el archivo.
+  // El más reciente agregado siempre va primero en "Lo Nuevo"
   nuevos.sort((a, b) => {
     const ta = parseInt((a.p.id.match(/\d+/) || ["0"])[0], 10);
     const tb = parseInt((b.p.id.match(/\d+/) || ["0"])[0], 10);
     return tb - ta;
   });
 
+  // Ofertas: las de mayor descuento primero
+  ofertas.sort((a, b) => porcentajeDescuento(b.p) - porcentajeDescuento(a.p));
+
   let html = "";
+  if (ofertas.length){
+    html += `<section class="seccion seccion-ofertas" id="cat-tend-ofertas">
+      <div class="seccion-header">
+        <span class="seccion-ico">🔥</span>
+        <span class="seccion-titulo">Ofertas del día</span>
+        <span class="seccion-count">${ofertas.length} producto${ofertas.length!==1?"s":""} rebajado${ofertas.length!==1?"s":""}</span>
+      </div>
+      <div class="grid">${ofertas.map(({p, idx}) => cardHTML(p, idx, true)).join("")}</div>
+    </section>`;
+  }
   if (vendidos.length){
     html += `<section class="seccion" id="cat-tend-vendidos">
       <div class="seccion-header">
@@ -2113,15 +2263,52 @@ function renderizarContenido(){
     return;
   }
 
-  const datos = catActiva === "todas" ? DATA : DATA.filter(p => p.categoria === catActiva);
+  // Filtrado según categoría activa
+  let datos;
+  if (catActiva === "todas") {
+    datos = DATA;
+  } else if (catActiva === "ofertas") {
+    datos = DATA.filter(p => tieneDescuento(p));
+  } else {
+    datos = DATA.filter(p => p.categoria === catActiva);
+  }
+
   if (!datos.length) {
     vacio.style.display = "block";
-    vacio.innerHTML = `<div class="ico">${icoCat(catActiva)}</div><div>Todavía no hay productos en "${nombreCat(catActiva)}".</div>`;
+    if (catActiva === "ofertas") {
+      vacio.innerHTML = `<div class="ico">🔥</div><div>No hay ofertas disponibles por el momento.</div>`;
+    } else {
+      vacio.innerHTML = `<div class="ico">${icoCat(catActiva)}</div><div>Todavía no hay productos en "${nombreCat(catActiva)}".</div>`;
+    }
     return;
   }
 
+  // ===== Vista especial para "Ofertas": un solo grid, sin agrupar por categoría =====
+  if (catActiva === "ofertas") {
+    contenido.style.display = "block";
+    // Ordenar por mayor descuento primero
+    const ordenadas = datos
+      .map(p => ({ p, idx: DATA.indexOf(p) }))
+      .sort((a, b) => porcentajeDescuento(b.p) - porcentajeDescuento(a.p));
+
+    contenido.innerHTML = `
+      <section class="seccion seccion-ofertas" id="cat-ofertas">
+        <div class="seccion-header">
+          <span class="seccion-ico">🔥</span>
+          <span class="seccion-titulo">Todas las Ofertas</span>
+          <span class="seccion-count">${ordenadas.length} producto${ordenadas.length!==1?"s":""}</span>
+        </div>
+        <div class="grid">${ordenadas.map(({p, idx}) => cardHTML(p, idx, true)).join("")}</div>
+      </section>
+    `;
+    bindCards(contenido);
+    aplicarProteccionImagenes();
+    return;
+  }
+
+  // ===== Agrupar por categoría =====
   const porCat = {};
-  datos.forEach((p, i) => {
+  datos.forEach((p) => {
     const cat = p.categoria || "miscelaneos";
     if (!porCat[cat]) porCat[cat] = [];
     porCat[cat].push({ p, idx: DATA.indexOf(p) });
@@ -2135,7 +2322,10 @@ function renderizarContenido(){
     });
   }
 
-  const orden = CATEGORIAS.filter(c => c.id !== "garantia-domicilio" && c.id !== "todas").map(c => c.id).filter(id => porCat[id]);
+  const orden = CATEGORIAS
+    .filter(c => c.id !== "garantia-domicilio" && c.id !== "todas" && c.id !== "ofertas")
+    .map(c => c.id)
+    .filter(id => porCat[id]);
 
   contenido.style.display = "block";
   const tendenciasPrevias = (catActiva === "todas") ? bloquesTendencias() : "";
@@ -2165,24 +2355,39 @@ function badgeHTML(p){
   return "";
 }
 
+function precioHTMLCard(p){
+  if (tieneDescuento(p)) {
+    const pct = porcentajeDescuento(p);
+    return `<div class="card-precio-wrap">
+      <span class="card-precio rebajado">${fmt(p.precio)}</span>
+      <span class="card-precio-original">${fmt(p.precio_original)}</span>
+      <span class="card-descuento-txt">-${pct}%</span>
+    </div>`;
+  }
+  if (p.precio) {
+    return `<div class="card-precio">${fmt(p.precio)}</div>`;
+  }
+  return `<div class="card-precio" style="font-size:12px;color:var(--text-muted);">Consultar</div>`;
+}
+
 function cardHTML(p, idx, mostrarTag=false){
   const tag = mostrarTag ? `<div class="card-cat-tag">${icoCat(p.categoria)} ${nombreCat(p.categoria)}</div>` : "";
   const hasImg = p.imagen && p.imagen.length > 0;
   const imgSrc = hasImg ? p.imagen : "";
+  const rebajadoClass = tieneDescuento(p) ? " card-rebajado" : "";
   const imgWrap = `<div class="card-img-wrap">
     ${badgeHTML(p)}
+    ${descuentoBadgeHTML(p)}
     ${domicilioBadgeHTML(p)}
     ${hasImg ? `<img src="${imgSrc}" alt="${p.nombre}" loading="lazy" decoding="async" data-idx="${idx}" onerror="this.style.display='none'; this.parentElement.querySelector('.card-img-ph').style.display='flex';">` : ''}
     <div class="card-img-ph" style="display:${hasImg ? 'none' : 'flex'};" data-idx="${idx}">${IMG_PH_ICO}<span>Sin foto</span></div>
   </div>`;
 
-  const precio = p.precio ? `<div class="card-precio">${fmt(p.precio)}</div>` : `<div class="card-precio" style="font-size:12px;color:var(--text-muted);">Consultar</div>`;
-
-  return `<article class="card">
+  return `<article class="card${rebajadoClass}">
     ${imgWrap}${tag}
     <div class="card-body">
       <div class="card-nombre" data-idx="${idx}">${p.nombre}</div>
-      ${precio}
+      ${precioHTMLCard(p)}
       <div class="card-actions">
         <button class="card-pedir" data-idx="${idx}" data-action="pedir">${WA_ICO} Pedir</button>
         <button class="card-add" data-idx="${idx}" data-action="add">+</button>
@@ -2261,11 +2466,12 @@ function buildCatsNav(){
   const inner = document.getElementById("catsInner");
   wrap.style.display = "flex";
 
-  inner.innerHTML = CATEGORIAS.map(c =>
-    `<button class="cat-btn ${catActiva === c.id ? 'active' : ''}" data-cat="${c.id}" style="scroll-snap-align:start;">
+  inner.innerHTML = CATEGORIAS.map(c => {
+    const extraClass = c.id === "ofertas" ? " cat-btn-ofertas" : "";
+    return `<button class="cat-btn${extraClass} ${catActiva === c.id ? 'active' : ''}" data-cat="${c.id}" style="scroll-snap-align:start;">
       <span class="cat-ico">${c.ico}</span>${c.nombre}
-    </button>`
-  ).join("");
+    </button>`;
+  }).join("");
 
   inner.querySelectorAll(".cat-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
@@ -2281,6 +2487,21 @@ function buildCatsNav(){
       const btnRect = btn.getBoundingClientRect();
       const scrollLeft = btn.offsetLeft - (navRect.width / 2) + (btnRect.width / 2);
       nav.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+
+      // ===== Scroll al primer producto de la categoría =====
+      // (después de que el DOM se haya renderizado)
+      setTimeout(() => {
+        if (catActiva === "garantia-domicilio") {
+          scrollAlInicio();
+        } else if (catActiva === "todas") {
+          // Ir al inicio del catálogo agrupado (arriba del todo)
+          scrollAlInicio();
+        } else if (catActiva === "ofertas") {
+          scrollToSeccion("cat-ofertas");
+        } else {
+          scrollToSeccion("cat-" + catActiva);
+        }
+      }, 80);
     });
   });
 
@@ -2350,8 +2571,24 @@ function abrirModal(p){
   _modalProducto = p;
   document.getElementById("mTag").textContent = `${icoCat(p.categoria)} ${nombreCat(p.categoria)}`;
   document.getElementById("mNombre").textContent = p.nombre;
-  document.getElementById("mPrecio").textContent = fmt(p.precio);
   document.getElementById("mDesc").textContent = p.descripcion||"";
+
+  // ===== Precio (con o sin descuento) =====
+  const precioWrap = document.getElementById("mPrecioWrap");
+  if (tieneDescuento(p)) {
+    const pct = porcentajeDescuento(p);
+    precioWrap.innerHTML = `
+      <div class="modal-precio-wrap">
+        <span class="modal-precio rebajado">${fmt(p.precio)}</span>
+        <span class="modal-precio-original">${fmt(p.precio_original)}</span>
+        <span class="modal-descuento-badge">-${pct}% OFF</span>
+      </div>
+    `;
+  } else if (p.precio) {
+    precioWrap.innerHTML = `<div class="modal-precio">${fmt(p.precio)}</div>`;
+  } else {
+    precioWrap.innerHTML = `<div class="modal-precio" style="font-size:14px;color:var(--text-muted);">Consultar precio</div>`;
+  }
 
   // Domicilio gratis en modal
   const domEl = document.getElementById("mDomicilio");
