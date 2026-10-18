@@ -64,6 +64,8 @@
       --red: #c0392b;
       --red-light: #e6391a;
       --green: #1a8a4a;
+      --xmas-red: #b91c1c;
+      --xmas-green: #14532d;
     }
     html {
       scroll-behavior: smooth;
@@ -99,13 +101,95 @@
 
     /* ===== UTILITY BAR ===== */
     .util-bar {
-      background: var(--navy);
-      color: rgba(255,255,255,0.7);
+      background: linear-gradient(90deg, #0b3d1f 0%, #0a1a2b 45%, #0a1a2b 55%, #6b1414 100%);
+      color: rgba(255,255,255,0.85);
       font-size: 12px;
       text-align: center;
       padding: 6px 10px;
       letter-spacing: 0.02em;
       border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* ===== ANUNCIO NAVIDEÑO ===== */
+    .xmas-promo {
+      position: relative;
+      background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 30%, #14532d 100%);
+      color: #fff;
+      padding: 12px 44px 12px 16px;
+      text-align: center;
+      border-bottom: 3px solid #e8b84a;
+      box-shadow: 0 4px 20px rgba(153,27,27,0.35);
+      overflow: hidden;
+    }
+    .xmas-promo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.16) 1px, transparent 1px),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,0.12) 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, rgba(255,255,255,0.10) 1px, transparent 1px);
+      background-size: 80px 80px, 100px 100px, 120px 120px;
+      pointer-events: none;
+    }
+    .xmas-promo-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .xmas-promo-ico {
+      font-size: 26px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      animation: xmas-bounce 2.4s ease-in-out infinite;
+    }
+    .xmas-promo-ico:last-of-type {
+      animation-delay: 1.2s;
+    }
+    @keyframes xmas-bounce {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-4px) rotate(5deg); }
+    }
+    .xmas-promo-text {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+    }
+    .xmas-promo-text strong {
+      color: #fde68a;
+      font-weight: 800;
+    }
+    .xmas-promo-close {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+    .xmas-promo-close:hover {
+      background: rgba(0,0,0,0.55);
+    }
+    @media (max-width: 480px) {
+      .xmas-promo-text { font-size: 12.5px; }
+      .xmas-promo-ico { font-size: 20px; }
+      .xmas-promo { padding: 10px 40px 10px 12px; }
     }
 
     /* ===== HEADER ===== */
@@ -116,6 +200,21 @@
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+    }
+    .site-header::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #b91c1c, #e8b84a, #14532d, #b91c1c);
+      background-size: 200% 100%;
+      animation: xmas-border-flow 6s linear infinite;
+    }
+    @keyframes xmas-border-flow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
     }
     .header-inner {
       display: flex;
@@ -238,7 +337,7 @@
     .moneda-selector {
       background: rgba(255,255,255,0.1);
       border-radius: 16px;
-      padding: 0 4px;
+      padding: 0 6px;
       height: 32px;
       display: flex;
       align-items: center;
@@ -251,13 +350,13 @@
       color: #fff;
       font-weight: 700;
       font-size: 11px;
-      padding: 0;
+      padding: 0 2px;
       font-family: var(--font);
       width: auto;
+      max-width: 70px;
       cursor: pointer;
       appearance: none;
       -webkit-appearance: none;
-      -moz-appearance: none;
       text-align: center;
     }
     .moneda-selector select:focus {
@@ -344,10 +443,11 @@
       }
       .moneda-selector {
         height: 30px;
-        padding: 0 2px;
+        padding: 0 4px;
       }
       .moneda-selector select {
-        font-size: 10.5px;
+        font-size: 11px;
+        max-width: 60px;
       }
     }
 
@@ -598,6 +698,13 @@
       box-shadow: 0 8px 30px rgba(230,57,26,0.22);
       border-color: #e6391a;
     }
+    .card.card-gorro {
+      border-color: #f0c0c0;
+    }
+    .card.card-gorro:hover {
+      border-color: #b91c1c;
+      box-shadow: 0 8px 30px rgba(185,28,28,0.22);
+    }
     .card-img-wrap {
       position: relative;
       width: 100%;
@@ -673,7 +780,6 @@
       bottom: 8px;
       left: 8px;
     }
-    /* Badge de descuento estilo Amazon (-X%) */
     .card-badge.badge-descuento {
       top: 8px;
       right: 8px;
@@ -685,6 +791,35 @@
       border-radius: 4px;
       letter-spacing: 0.02em;
       box-shadow: 0 4px 12px rgba(230,57,26,0.45);
+    }
+    /* ===== PILA DE BADGES ARRIBA-IZQUIERDA ===== */
+    .card-badges-tl {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+      pointer-events: none;
+      max-width: calc(100% - 16px);
+    }
+    .card-badges-tl .card-badge {
+      position: static;
+      top: auto;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      margin: 0;
+    }
+    /* ===== BADGE GORRO DE NAVIDAD ===== */
+    .card-badge.badge-gorro {
+      background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 3px 10px rgba(185,28,28,0.5);
+      color: #fff;
+      font-weight: 800;
     }
     .card-body {
       padding: 8px 12px 12px;
@@ -705,13 +840,11 @@
       min-height: 34px;
       cursor: pointer;
     }
-    /* Precio normal */
     .card-precio {
       font-size: 17px;
       font-weight: 800;
       color: var(--navy);
     }
-    /* Precio rebajado estilo Amazon */
     .card-precio-wrap {
       display: flex;
       align-items: baseline;
@@ -1460,12 +1593,48 @@
       justify-content: space-between;
       gap: 6px 14px;
     }
+
+    /* ===== NIEVE NAVIDEÑA ===== */
+    .xmas-snow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 110;
+      overflow: hidden;
+    }
+    .xmas-snow-flake {
+      position: absolute;
+      top: -30px;
+      color: #ffffff;
+      user-select: none;
+      will-change: transform;
+      animation-name: xmas-fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      text-shadow: 0 0 6px rgba(255,255,255,0.7);
+    }
+    @keyframes xmas-fall {
+      0% { transform: translateY(-30px) translateX(0) rotate(0deg); }
+      100% { transform: translateY(105vh) translateX(40px) rotate(360deg); }
+    }
   </style>
 </head>
 <body>
 
 <!-- ===== UTILITY BAR ===== -->
-<div class="util-bar">🇨🇺 VENTACIEN · Todo lo que necesitas, cerca de ti</div>
+<div class="util-bar">🎄 VENTACIEN · Todo lo que necesitas, cerca de ti · ¡Felices Fiestas! 🎅</div>
+
+<!-- ===== ANUNCIO NAVIDEÑO ===== -->
+<div class="xmas-promo" id="xmasPromo">
+  <div class="xmas-promo-inner">
+    <span class="xmas-promo-ico">🎅</span>
+    <span class="xmas-promo-text">
+      <strong>¡Promo Navideña!</strong> En productos de <strong>más de $20 USD</strong> te llevás un <strong>gorro de Navidad gratis</strong> 🎁
+    </span>
+    <span class="xmas-promo-ico">🎄</span>
+  </div>
+  <button class="xmas-promo-close" id="xmasPromoClose" aria-label="Cerrar anuncio">✕</button>
+</div>
 
 <!-- ===== HEADER ===== -->
 <header class="site-header">
@@ -1490,13 +1659,13 @@
 
     <div class="header-actions">
       <div class="moneda-selector">
-        <select id="currencySelect">
+        <select id="currencySelect" title="Cambiar moneda">
           <option value="USD" selected>USD</option>
-          <option value="MN">MN (770)</option>
-          <option value="Transferencia">Transferencia (800)</option>
+          <option value="MN">MN (810)</option>
+          <option value="Transferencia">Transferencia (825)</option>
           <option value="Zelle">Zelle (1.05)</option>
           <option value="Tarjeta">Tarjeta (1.1)</option>
-          <option value="Euro">Euro (0.93)</option>
+          <option value="Euro">Euro (0.90)</option>
         </select>
       </div>
       <button class="cart-icon" id="cartToggle" aria-label="Carrito">
@@ -1574,7 +1743,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© <span id="anioActual"></span> VENTACIEN</span>
+    <span>© <span id="anioActual"></span> VENTACIEN 🎄</span>
     <span>Todos los pedidos se coordinan por WhatsApp</span>
   </div>
 </footer>
@@ -1590,6 +1759,7 @@
       <h2 class="modal-nombre" id="mNombre"></h2>
       <div id="mPrecioWrap"></div>
       <div id="mDomicilio" style="font-size:13px;font-weight:600;margin-bottom:8px;"></div>
+      <div id="mGorro" style="font-size:13px;font-weight:600;margin-bottom:8px;display:none;"></div>
       <p class="modal-desc" id="mDesc"></p>
       <button class="modal-pedir" id="mPedir">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.85L.057 23.5l5.797-1.52A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.85 0-3.583-.497-5.073-1.365l-.363-.215-3.44.902.917-3.349-.236-.375A9.957 9.957 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
@@ -1672,11 +1842,11 @@ const WA = "5354571729";
 
 const TASAS = {
   USD: 1,
-  MN: 770,
-  Transferencia: 800,
+  MN: 810,
+  Transferencia: 825,
   Zelle: 1.05,
   Tarjeta: 1.1,
-  Euro: 0.93
+  Euro: 0.90
 };
 
 const CATEGORIAS = [
@@ -1701,10 +1871,16 @@ const WA_ICO = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentCol
 const IMG_PH_ICO = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`;
 
 // ============================================================
-//  CONFIG: DÍAS QUE DURAN LAS ETIQUETAS TEMPORALES
+//  CONFIG: DÍAS QUE DURA LA ETIQUETA "NUEVO"
 // ============================================================
-const DIAS_NUEVO = 7;    // duración de la etiqueta 🆕 Nuevo
-const DIAS_REBAJA = 7;   // duración de la rebaja 🔥 (oferta)
+const DIAS_NUEVO = 7;
+
+// ============================================================
+//  CONFIG: PROMO NAVIDEÑA (GORRO GRATIS)
+//  El gorro se aplica a productos con precio >= $20 USD.
+//  Si querés que sea estrictamente MAYOR a $20, cambiá >= por >.
+// ============================================================
+const PRECIO_MIN_GORRO_USD = 20;
 
 // ============================================================
 //  FUNCIONES AUXILIARES
@@ -1718,36 +1894,12 @@ function limpiarNombreParaOrdenar(nombre) {
     .toLowerCase();
 }
 
-// ============================================================
-//  REBAJA CON EXPIRACIÓN A LOS 7 DÍAS
-// ============================================================
-// Reglas:
-//  - Si p.fecha_rebaja NO existe → la rebaja se considera activa
-//    (compatibilidad con productos antiguos que no tienen fecha).
-//  - Si p.fecha_rebaja SÍ existe → la rebaja es válida solo si han
-//    pasado MENOS de DIAS_REBAJA días desde esa fecha.
-function rebajaExpirada(p){
-  if (!p || !p.fecha_rebaja) return false;
-  const fecha = new Date(p.fecha_rebaja);
-  if (isNaN(fecha.getTime())) return false;
-  const ahora = new Date();
-  const diffMs = ahora.getTime() - fecha.getTime();
-  if (diffMs < 0) return false;
-  const diasTranscurridos = diffMs / (1000 * 60 * 60 * 24);
-  return diasTranscurridos >= DIAS_REBAJA;
-}
-
-// Detecta si un producto tiene descuento ACTIVO (no expirado)
 function tieneDescuento(p){
-  if (!p) return false;
   const po = parseFloat(p.precio_original);
   const pf = parseFloat(p.precio);
-  if (!(!isNaN(po) && !isNaN(pf) && po > pf && po > 0)) return false;
-  if (rebajaExpirada(p)) return false;
-  return true;
+  return !isNaN(po) && !isNaN(pf) && po > pf && po > 0;
 }
 
-// Calcula el porcentaje de descuento (ej: 25)
 function porcentajeDescuento(p){
   if (!tieneDescuento(p)) return 0;
   const po = parseFloat(p.precio_original);
@@ -1755,19 +1907,17 @@ function porcentajeDescuento(p){
   return Math.round(((po - pf) / po) * 100);
 }
 
-// Devuelve el precio EFECTIVO a mostrar (con o sin rebaja):
-//  - Si hay rebaja activa → precio rebajado (p.precio)
-//  - Si la rebaja expiró → precio original (p.precio_original)
-//  - Si no hay rebaja nunca → precio normal (p.precio)
-function precioEfectivo(p){
-  if (!p) return 0;
-  if (tieneDescuento(p)) return p.precio;
-  const po = parseFloat(p.precio_original);
-  const pf = parseFloat(p.precio);
-  if (!isNaN(po) && !isNaN(pf) && po > pf && po > 0 && rebajaExpirada(p)) {
-    return p.precio_original;
-  }
-  return p.precio;
+// ============================================================
+//  PROMO GORRO DE NAVIDAD
+// ============================================================
+function tieneGorroGratis(p){
+  const precioUSD = parseFloat(p.precio);
+  return !isNaN(precioUSD) && precioUSD >= PRECIO_MIN_GORRO_USD;
+}
+
+function hatBadgeHTML(p){
+  if (!tieneGorroGratis(p)) return "";
+  return `<div class="card-badge badge-gorro">🎅 Gorro gratis</div>`;
 }
 
 // ============================================================
@@ -1947,8 +2097,12 @@ function agregarAlCarrito(producto){
     carrito.push({ ...producto, cantidad: 1 });
   }
   guardarCarrito();
-  toast(`✅ ${producto.nombre} agregado al carrito`);
-  trackEvent('Carrito', 'add_to_cart', producto.nombre, parseFloat(precioEfectivo(producto)));
+  if (tieneGorroGratis(producto)) {
+    toast(`🎅 ${producto.nombre} agregado. ¡Incluye gorro de Navidad gratis!`);
+  } else {
+    toast(`✅ ${producto.nombre} agregado al carrito`);
+  }
+  trackEvent('Carrito', 'add_to_cart', producto.nombre, parseFloat(producto.precio));
 }
 
 function eliminarDelCarrito(id){
@@ -1980,7 +2134,7 @@ function vaciarCarrito(){
 }
 
 function totalCarrito(){
-  return carrito.reduce((s,i) => s + fmtRaw(precioEfectivo(i)) * i.cantidad, 0);
+  return carrito.reduce((s,i) => s + fmtRaw(i.precio) * i.cantidad, 0);
 }
 
 function renderCarrito(){
@@ -2002,7 +2156,7 @@ function renderCarrito(){
       ${item.imagen ? `<img class="cart-item-img" src="${item.imagen}" alt="${item.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'cart-item-img\\' style=\\'display:flex;align-items:center;justify-content:center;font-size:20px;\\'>🖼️</div>'">` : `<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🖼️</div>`}
       <div class="cart-item-info">
         <div class="cart-item-nombre">${item.nombre}</div>
-        <div class="cart-item-precio">${fmt(precioEfectivo(item))}</div>
+        <div class="cart-item-precio">${fmt(item.precio)}</div>
       </div>
       <div class="cart-item-actions">
         <button onclick="cambiarCantidad('${item.id}', -1)">−</button>
@@ -2044,7 +2198,7 @@ function abrirPlanilla(producto){
   document.querySelectorAll(".order-form .error").forEach(e=>e.style.display="none");
 
   if (producto) {
-    trackEvent('Checkout', 'begin_checkout', producto.nombre, parseFloat(precioEfectivo(producto)));
+    trackEvent('Checkout', 'begin_checkout', producto.nombre, parseFloat(producto.precio));
   }
 }
 
@@ -2089,7 +2243,7 @@ document.getElementById("ofSend").addEventListener("click", ()=>{
   let items, total;
   if(productoParaPedir){
     items = `* ${productoParaPedir.nombre} x1`;
-    total = fmtRaw(precioEfectivo(productoParaPedir));
+    total = fmtRaw(productoParaPedir.precio);
   } else {
     items = carrito.map(i => `* ${i.nombre} x${i.cantidad}`).join("\n");
     total = totalCarrito();
@@ -2131,6 +2285,7 @@ function renderGarantiaDomicilio() {
   return `
     <div class="landing-section">
 
+      <!-- GARANTÍA -->
       <div class="landing-card" style="border-color:#c0392b; border-width:2px;">
         <div class="landing-title" style="color:#c0392b;">
           <span class="ico">🛡️</span> Política de Garantía
@@ -2167,6 +2322,7 @@ function renderGarantiaDomicilio() {
           </div>
         </div>
 
+        <!-- PRODUCTOS SIN GARANTÍA -->
         <div style="margin-top:16px; background:#fff5f4; border-radius:8px; padding:16px; border:2px solid #c0392b;">
           <p style="font-size:15px; font-weight:700; color:#c0392b; text-align:center; margin-bottom:8px;">
             🚨 <span style="background:#c0392b; color:#fff; padding:0 10px; border-radius:4px;">PRODUCTOS QUE NO TIENEN GARANTÍA</span>
@@ -2180,6 +2336,7 @@ function renderGarantiaDomicilio() {
         </div>
       </div>
 
+      <!-- DOMICILIO GRATIS -->
       <div class="landing-card" style="background:linear-gradient(135deg, #0a1a2b, #12304a); color:#fff; border-color:#c8922a; text-align:center; padding:20px;">
         <div style="display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;">
           <span style="font-size:36px;">🚚</span>
@@ -2192,6 +2349,7 @@ function renderGarantiaDomicilio() {
         <div style="font-size:12px; opacity:0.7; margin-top:6px;">⏳ Sujeto a disponibilidad de repartidores y condiciones climáticas</div>
       </div>
 
+      <!-- PRECIOS POR MUNICIPIO -->
       <div class="landing-card">
         <div class="landing-title">
           <span class="ico">🚨</span> Listado de precios de domicilio a Municipios
@@ -2433,7 +2591,7 @@ function precioHTMLCard(p){
     </div>`;
   }
   if (p.precio) {
-    return `<div class="card-precio">${fmt(precioEfectivo(p))}</div>`;
+    return `<div class="card-precio">${fmt(p.precio)}</div>`;
   }
   return `<div class="card-precio" style="font-size:12px;color:var(--text-muted);">Consultar</div>`;
 }
@@ -2443,15 +2601,17 @@ function cardHTML(p, idx, mostrarTag=false){
   const hasImg = p.imagen && p.imagen.length > 0;
   const imgSrc = hasImg ? p.imagen : "";
   const rebajadoClass = tieneDescuento(p) ? " card-rebajado" : "";
+  const gorroClass = tieneGorroGratis(p) ? " card-gorro" : "";
+  const badgesTL = `${badgeHTML(p)}${hatBadgeHTML(p)}`;
   const imgWrap = `<div class="card-img-wrap">
-    ${badgeHTML(p)}
+    ${badgesTL ? `<div class="card-badges-tl">${badgesTL}</div>` : ''}
     ${descuentoBadgeHTML(p)}
     ${domicilioBadgeHTML(p)}
     ${hasImg ? `<img src="${imgSrc}" alt="${p.nombre}" loading="lazy" decoding="async" data-idx="${idx}" onerror="this.style.display='none'; this.parentElement.querySelector('.card-img-ph').style.display='flex';">` : ''}
     <div class="card-img-ph" style="display:${hasImg ? 'none' : 'flex'};" data-idx="${idx}">${IMG_PH_ICO}<span>Sin foto</span></div>
   </div>`;
 
-  return `<article class="card${rebajadoClass}">
+  return `<article class="card${rebajadoClass}${gorroClass}">
     ${imgWrap}${tag}
     <div class="card-body">
       <div class="card-nombre" data-idx="${idx}">${p.nombre}</div>
@@ -2646,7 +2806,7 @@ function abrirModal(p){
       </div>
     `;
   } else if (p.precio) {
-    precioWrap.innerHTML = `<div class="modal-precio">${fmt(precioEfectivo(p))}</div>`;
+    precioWrap.innerHTML = `<div class="modal-precio">${fmt(p.precio)}</div>`;
   } else {
     precioWrap.innerHTML = `<div class="modal-precio" style="font-size:14px;color:var(--text-muted);">Consultar precio</div>`;
   }
@@ -2656,6 +2816,15 @@ function abrirModal(p){
     domEl.innerHTML = '🚫 <span style="color:#c0392b;font-weight:700;">Sin domicilio gratis</span>';
   } else {
     domEl.innerHTML = '✅ <span style="color:#1a8a4a;">Domicilio gratis disponible</span>';
+  }
+
+  // Aviso navideño: gorro gratis
+  const gorroEl = document.getElementById("mGorro");
+  if (tieneGorroGratis(p)) {
+    gorroEl.style.display = "block";
+    gorroEl.innerHTML = '🎅 <span style="color:#b91c1c;font-weight:800;">¡Incluye gorro de Navidad gratis!</span>';
+  } else {
+    gorroEl.style.display = "none";
   }
 
   const hasImg = p.imagen && p.imagen.length > 0;
@@ -2774,10 +2943,54 @@ document.getElementById("footerWA").addEventListener("click", e=>{ e.preventDefa
 document.getElementById("headerContact").addEventListener("click", ()=>openWA("Hola, quisiera más información sobre sus productos."));
 
 // ============================================================
+//  ANUNCIO NAVIDEÑO (CERRAR)
+// ============================================================
+(function initXmasPromo(){
+  const promo = document.getElementById("xmasPromo");
+  const closeBtn = document.getElementById("xmasPromoClose");
+  if (!promo) return;
+  try {
+    if (sessionStorage.getItem("xmas_promo_cerrado") === "1") {
+      promo.style.display = "none";
+      return;
+    }
+  } catch(e){}
+  closeBtn.addEventListener("click", () => {
+    promo.style.display = "none";
+    try { sessionStorage.setItem("xmas_promo_cerrado", "1"); } catch(e){}
+  });
+})();
+
+// ============================================================
+//  NIEVE NAVIDEÑA
+// ============================================================
+function iniciarNieve(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cont = document.createElement('div');
+  cont.className = 'xmas-snow';
+  cont.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(cont);
+  const iconos = ['❄', '❅', '❆', '✻', '•'];
+  const total = 24;
+  for (let i = 0; i < total; i++) {
+    const copo = document.createElement('span');
+    copo.className = 'xmas-snow-flake';
+    copo.textContent = iconos[Math.floor(Math.random() * iconos.length)];
+    copo.style.left = (Math.random() * 100) + 'vw';
+    copo.style.fontSize = (7 + Math.random() * 15) + 'px';
+    copo.style.opacity = (0.35 + Math.random() * 0.55).toFixed(2);
+    copo.style.animationDuration = (9 + Math.random() * 14) + 's';
+    copo.style.animationDelay = (-Math.random() * 20) + 's';
+    cont.appendChild(copo);
+  }
+}
+
+// ============================================================
 //  INICIO
 // ============================================================
 cargarCarrito();
 cargarProductos();
+iniciarNieve();
 </script>
 </body>
 </html>
