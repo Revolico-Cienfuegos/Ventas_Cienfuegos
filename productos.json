@@ -1941,6 +1941,7 @@
     "etiqueta": "nuevo",
     "agotado": false,
     "domicilio_gratis": true,
+    "regalo_navideno": false,
     "imagen": "imagenes/Bateria-128V-290usd.jpg",
     "precio_original": "290",
     "fecha_agregado": "2026-10-07"
@@ -1969,6 +1970,7 @@
     "etiqueta": "nuevo",
     "agotado": false,
     "domicilio_gratis": true,
+    "regalo_navideno": false,
     "imagen": "imagenes/Bateria-256V-590usd.jpg",
     "precio_original": "630",
     "fecha_agregado": "2026-10-07"
