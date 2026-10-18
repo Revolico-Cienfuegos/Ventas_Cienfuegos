@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>🎄 VENTACIEN · Tienda Online</title>
+  <title>VENTACIEN · Tienda Online</title>
     <!-- ===== OPEN GRAPH / VISTA PREVIA AL COMPARTIR ===== -->
 <meta property="og:title" content="VENTACIEN · Tienda Online">
 <meta property="og:description" content="Todo lo que necesitas, cerca de ti. Catálogo de productos con envío a domicilio en Cienfuegos.">
@@ -26,12 +26,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0a1a2b">
+  <meta name="theme-color" content="#c4162a">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -64,10 +66,6 @@
       --red: #c0392b;
       --red-light: #e6391a;
       --green: #1a8a4a;
-      --xmas-red: #b91c1c;
-      --xmas-green: #14532d;
-      --xmas-gold: #e8b84a;
-      --xmas-glow: rgba(232,184,74,0.4);
     }
     html {
       scroll-behavior: smooth;
@@ -78,9 +76,8 @@
       color: var(--text-primary);
       min-height: 100vh;
       font-size: 15px;
-      line-height: 1.55;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
     a {
       text-decoration: none;
@@ -102,279 +99,25 @@
       padding: 0 16px;
     }
 
-    /* ============================================================
-       MARCO NAVIDEÑO EN LOS BORDES DE LA PÁGINA
-       ============================================================ */
-    .xmas-frame {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 140;
-    }
-
-    .xmas-bar {
-      position: absolute;
-      background: linear-gradient(90deg,
-        #14532d 0%,
-        #b91c1c 25%,
-        #e8b84a 50%,
-        #b91c1c 75%,
-        #14532d 100%);
-      background-size: 200% 100%;
-      animation: xmas-flow 9s linear infinite;
-      box-shadow: 0 0 14px rgba(232,184,74,0.35);
-    }
-
-    .xmas-bar-top,
-    .xmas-bar-bottom {
-      left: 0;
-      right: 0;
-      height: 4px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 0 6px;
-      overflow: visible;
-    }
-    .xmas-bar-top { top: 0; }
-    .xmas-bar-bottom { bottom: 0; }
-
-    .xmas-bar-left,
-    .xmas-bar-right {
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: linear-gradient(180deg,
-        #14532d 0%,
-        #b91c1c 25%,
-        #e8b84a 50%,
-        #b91c1c 75%,
-        #14532d 100%);
-      background-size: 100% 200%;
-      animation: xmas-flow-y 9s linear infinite;
-      box-shadow: 0 0 14px rgba(232,184,74,0.35);
-    }
-    .xmas-bar-left { left: 0; }
-    .xmas-bar-right { right: 0; }
-
-    @keyframes xmas-flow {
-      0% { background-position: 0% 0; }
-      100% { background-position: 200% 0; }
-    }
-    @keyframes xmas-flow-y {
-      0% { background-position: 0 0%; }
-      100% { background-position: 0 200%; }
-    }
-
-    /* Luces LED sobre las barras superior e inferior */
-    .xmas-light {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--xmas-color);
-      box-shadow:
-        0 0 6px var(--xmas-color),
-        0 0 12px var(--xmas-color),
-        0 0 18px var(--xmas-color);
-      animation: xmas-twinkle 1.8s ease-in-out infinite;
-      flex-shrink: 0;
-      position: relative;
-      transform-origin: center;
-    }
-    @keyframes xmas-twinkle {
-      0%, 100% { opacity: 0.45; transform: scale(0.8); }
-      50%      { opacity: 1;    transform: scale(1.15); }
-    }
-
-    /* Estrellas doradas en las 4 esquinas */
-    .xmas-corner {
-      position: absolute;
-      color: var(--xmas-gold);
-      font-size: 18px;
-      font-weight: 700;
-      line-height: 1;
-      text-shadow:
-        0 0 8px var(--xmas-gold),
-        0 0 16px rgba(232,184,74,0.7),
-        0 0 24px rgba(232,184,74,0.4);
-      animation: xmas-corner-pulse 2.6s ease-in-out infinite;
-      z-index: 2;
-      user-select: none;
-    }
-    .xmas-corner-tl { top: 2px; left: 3px; }
-    .xmas-corner-tr { top: 2px; right: 3px; }
-    .xmas-corner-bl { bottom: 2px; left: 3px; }
-    .xmas-corner-br { bottom: 2px; right: 3px; }
-
-    @keyframes xmas-corner-pulse {
-      0%, 100% { opacity: 0.8; transform: scale(1); }
-      50%      { opacity: 1;    transform: scale(1.3); }
-    }
-
-    @media (max-width: 480px) {
-      .xmas-bar-top,
-      .xmas-bar-bottom { height: 3px; padding: 0 3px; }
-      .xmas-bar-left,
-      .xmas-bar-right { width: 3px; }
-      .xmas-light { width: 4px; height: 4px; }
-      .xmas-corner { font-size: 13px; }
-      .xmas-corner-tl { top: 1px; left: 2px; }
-      .xmas-corner-tr { top: 1px; right: 2px; }
-      .xmas-corner-bl { bottom: 1px; left: 2px; }
-      .xmas-corner-br { bottom: 1px; right: 2px; }
-    }
-    @media print {
-      .xmas-frame { display: none; }
-    }
-
-    /* ============================================================
-       UTILITY BAR (refinada)
-       ============================================================ */
+    /* ===== UTILITY BAR ===== */
     .util-bar {
-      background:
-        linear-gradient(90deg, rgba(20,83,45,0.95) 0%, rgba(10,26,43,0.98) 40%, rgba(10,26,43,0.98) 60%, rgba(127,29,29,0.95) 100%);
-      color: rgba(255,255,255,0.82);
+      background: var(--navy);
+      color: rgba(255,255,255,0.7);
       font-size: 12px;
       text-align: center;
-      padding: 7px 14px;
-      letter-spacing: 0.03em;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      position: relative;
-    }
-    .util-bar strong {
-      color: var(--xmas-gold);
-      font-weight: 700;
-    }
-
-    /* ============================================================
-       ANUNCIO NAVIDEÑO (refinado, más profesional)
-       ============================================================ */
-    .xmas-promo {
-      position: relative;
-      background:
-        radial-gradient(ellipse at 12% 50%, rgba(232,184,74,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 88% 50%, rgba(232,184,74,0.18) 0%, transparent 55%),
-        linear-gradient(135deg, #5b0f0f 0%, #7f1d1d 45%, #0f3d1f 100%);
-      color: #fff;
-      padding: 14px 52px 14px 20px;
-      text-align: center;
-      border-bottom: 2px solid var(--xmas-gold);
-      box-shadow: 0 4px 22px rgba(0,0,0,0.28);
-      overflow: hidden;
-    }
-    .xmas-promo::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 8% 30%, rgba(255,255,255,0.16) 1px, transparent 1.4px),
-        radial-gradient(circle at 24% 70%, rgba(255,255,255,0.12) 1px, transparent 1.4px),
-        radial-gradient(circle at 47% 22%, rgba(255,255,255,0.14) 1px, transparent 1.4px),
-        radial-gradient(circle at 69% 78%, rgba(255,255,255,0.10) 1px, transparent 1.4px),
-        radial-gradient(circle at 88% 38%, rgba(255,255,255,0.16) 1px, transparent 1.4px),
-        radial-gradient(circle at 95% 72%, rgba(255,255,255,0.10) 1px, transparent 1.4px);
-      background-size: 140px 140px, 180px 180px, 160px 160px, 200px 200px, 220px 220px, 180px 180px;
-      pointer-events: none;
-      opacity: 0.9;
-    }
-    .xmas-promo-inner {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .xmas-promo-ico {
-      font-size: 24px;
-      flex-shrink: 0;
-      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.35));
-      animation: xmas-ico-sway 3s ease-in-out infinite;
-    }
-    .xmas-promo-ico:last-of-type {
-      animation-delay: 1.5s;
-    }
-    @keyframes xmas-ico-sway {
-      0%, 100% { transform: translateY(0) rotate(-6deg); }
-      50%      { transform: translateY(-4px) rotate(6deg); }
-    }
-    .xmas-promo-text {
-      font-size: 14.5px;
-      font-weight: 500;
-      line-height: 1.45;
-      letter-spacing: 0.01em;
-    }
-    .xmas-promo-text strong {
-      color: var(--xmas-gold);
-      font-weight: 800;
+      padding: 6px 10px;
       letter-spacing: 0.02em;
-    }
-    .xmas-promo-badge {
-      display: inline-block;
-      background: rgba(232,184,74,0.18);
-      color: var(--xmas-gold);
-      border: 1px solid rgba(232,184,74,0.5);
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-left: 6px;
-    }
-    .xmas-promo-close {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.32);
-      color: #fff;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .xmas-promo-close:hover {
-      background: rgba(0,0,0,0.55);
-      transform: translateY(-50%) scale(1.08);
-    }
-    @media (max-width: 560px) {
-      .xmas-promo-text { font-size: 12.8px; }
-      .xmas-promo-ico { font-size: 19px; }
-      .xmas-promo { padding: 11px 42px 11px 14px; }
-      .xmas-promo-badge { display: none; }
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    /* ============================================================
-       HEADER
-       ============================================================ */
+    /* ===== HEADER ===== */
     .site-header {
       background: var(--navy);
       color: #fff;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 18px rgba(0,0,0,0.22);
-      position: relative;
-    }
-    .site-header::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #b91c1c, #e8b84a, #14532d, #e8b84a, #b91c1c);
-      background-size: 200% 100%;
-      animation: xmas-flow 7s linear infinite;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.2);
     }
     .header-inner {
       display: flex;
@@ -493,7 +236,7 @@
       flex-wrap: wrap;
     }
 
-    /* ===== SELECTOR DE MONEDA ===== */
+    /* ===== SELECTOR DE MONEDA (COMPACTO) ===== */
     .moneda-selector {
       background: rgba(255,255,255,0.1);
       border-radius: 16px;
@@ -583,31 +326,52 @@
       fill: currentColor;
     }
     @media (max-width: 480px) {
-      .header-contact span { display: none; }
-      .header-contact { padding: 0 10px; height: 32px; }
-      .cart-icon { width: 36px; height: 36px; font-size: 16px; }
-      .logo img { height: 30px; }
-      .logo-name { font-size: 15px; }
-      .moneda-selector { height: 30px; padding: 0 4px; }
-      .moneda-selector select { font-size: 11px; max-width: 60px; }
+      .header-contact span {
+        display: none;
+      }
+      .header-contact {
+        padding: 0 10px;
+        height: 32px;
+      }
+      .cart-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      .logo img {
+        height: 30px;
+      }
+      .logo-name {
+        font-size: 15px;
+      }
+      .moneda-selector {
+        height: 30px;
+        padding: 0 4px;
+      }
+      .moneda-selector select {
+        font-size: 11px;
+        max-width: 60px;
+      }
     }
 
     /* ===== TRUST BAR ===== */
     .trust-bar {
       background: #fff;
       border-bottom: 1px solid var(--border-color);
-      padding: 9px 0;
+      padding: 8px 0;
     }
     .trust-inner {
       display: flex;
-      gap: 22px;
+      gap: 20px;
       overflow-x: auto;
       scrollbar-width: none;
       padding: 0 16px;
       max-width: 1200px;
       margin: 0 auto;
     }
-    .trust-inner::-webkit-scrollbar { display: none; }
+    .trust-inner::-webkit-scrollbar {
+      display: none;
+    }
     .trust-item {
       display: flex;
       align-items: center;
@@ -616,7 +380,6 @@
       color: var(--text-secondary);
       white-space: nowrap;
       flex-shrink: 0;
-      font-weight: 500;
     }
     .trust-item svg {
       flex-shrink: 0;
@@ -648,7 +411,9 @@
       scroll-snap-type: x mandatory;
       position: relative;
     }
-    .cats-scroll::-webkit-scrollbar { display: none; }
+    .cats-scroll::-webkit-scrollbar {
+      display: none;
+    }
     .cats-inner {
       display: inline-flex;
       gap: 4px;
@@ -676,11 +441,20 @@
       background: var(--navy-light);
       transform: scale(1.06);
     }
-    .cats-arrow:active:not(:disabled) { transform: scale(0.92); }
+    .cats-arrow:active:not(:disabled) {
+      transform: scale(0.92);
+    }
     .cats-arrow:disabled,
-    .cats-arrow.hidden { opacity: 0.22; pointer-events: none; }
+    .cats-arrow.hidden {
+      opacity: 0.22;
+      pointer-events: none;
+    }
     @media (max-width: 480px) {
-      .cats-arrow { width: 30px; height: 30px; font-size: 18px; }
+      .cats-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+      }
     }
     .cat-btn {
       display: inline-flex;
@@ -696,7 +470,9 @@
       scroll-snap-align: start;
       border: 1.5px solid transparent;
     }
-    .cat-btn .cat-ico { font-size: 14px; }
+    .cat-btn .cat-ico {
+      font-size: 14px;
+    }
     .cat-btn.active {
       background: var(--navy);
       color: #fff;
@@ -721,7 +497,7 @@
       border-color: #e6391a;
     }
 
-    /* ===== MAIN ===== */
+    /* ===== MAIN CONTENT ===== */
     .main {
       max-width: 1200px;
       margin: 0 auto;
@@ -729,7 +505,9 @@
     }
 
     /* ===== SKELETONS ===== */
-    #skeletons .seccion { margin-bottom: 28px; }
+    #skeletons .seccion {
+      margin-bottom: 28px;
+    }
     #skeletons .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -745,11 +523,18 @@
       0% { background-position: -200% 0; }
       100% { background-position: 200% 0; }
     }
-    .skel:first-child { height: 20px; width: 140px; }
-    .skel:not(:first-child) { height: 220px; }
+    .skel:first-child {
+      height: 20px;
+      width: 140px;
+    }
+    .skel:not(:first-child) {
+      height: 220px;
+    }
 
-    /* ===== SECCIONES ===== */
-    .seccion { margin-bottom: 32px; }
+    /* ===== SECCIONES DE PRODUCTOS ===== */
+    .seccion {
+      margin-bottom: 32px;
+    }
     .seccion-header {
       display: flex;
       align-items: baseline;
@@ -758,12 +543,13 @@
       padding-bottom: 6px;
       border-bottom: 2px solid var(--border-color);
     }
-    .seccion-ico { font-size: 18px; }
+    .seccion-ico {
+      font-size: 18px;
+    }
     .seccion-titulo {
       font-size: 18px;
       font-weight: 700;
       color: var(--navy);
-      letter-spacing: -0.01em;
     }
     .seccion-count {
       font-size: 13px;
@@ -771,8 +557,12 @@
       font-weight: 500;
       margin-left: auto;
     }
-    .seccion.seccion-ofertas .seccion-header { border-bottom-color: #e6391a; }
-    .seccion.seccion-ofertas .seccion-titulo { color: #c0392b; }
+    .seccion.seccion-ofertas .seccion-header {
+      border-bottom-color: #e6391a;
+    }
+    .seccion.seccion-ofertas .seccion-titulo {
+      color: #c0392b;
+    }
 
     /* ===== GRID ===== */
     .grid {
@@ -804,15 +594,12 @@
       transform: translateY(-3px);
       border-color: var(--gold);
     }
-    .card.card-rebajado { border-color: #e6391a; }
+    .card.card-rebajado {
+      border-color: #e6391a;
+    }
     .card.card-rebajado:hover {
       box-shadow: 0 8px 30px rgba(230,57,26,0.22);
       border-color: #e6391a;
-    }
-    .card.card-gorro { border-color: #f0c0c0; }
-    .card.card-gorro:hover {
-      border-color: #b91c1c;
-      box-shadow: 0 8px 30px rgba(185,28,28,0.22);
     }
     .card-img-wrap {
       position: relative;
@@ -831,7 +618,9 @@
       object-fit: contain;
       transition: transform var(--transition);
     }
-    .card:hover .card-img-wrap img { transform: scale(1.04); }
+    .card:hover .card-img-wrap img {
+      transform: scale(1.04);
+    }
     .card-img-ph {
       display: flex;
       flex-direction: column;
@@ -842,8 +631,13 @@
       width: 100%;
       height: 100%;
     }
-    .card-img-ph svg { opacity: 0.3; }
-    .card-img-ph span { font-size: 11px; font-weight: 600; }
+    .card-img-ph svg {
+      opacity: 0.3;
+    }
+    .card-img-ph span {
+      font-size: 11px;
+      font-weight: 600;
+    }
     .card-cat-tag {
       font-size: 10px;
       font-weight: 700;
@@ -870,14 +664,19 @@
       pointer-events: none;
       white-space: nowrap;
     }
-    .card-badge.badge-vendido { background: linear-gradient(135deg, #ff6a2f, #e6391a); }
-    .card-badge.badge-nuevo { background: linear-gradient(135deg, #2e9bff, #1257c9); }
+    .card-badge.badge-vendido {
+      background: linear-gradient(135deg, #ff6a2f, #e6391a);
+    }
+    .card-badge.badge-nuevo {
+      background: linear-gradient(135deg, #2e9bff, #1257c9);
+    }
     .card-badge.badge-sin-domicilio {
       background: linear-gradient(135deg, #6c757d, #343a40);
       top: auto;
       bottom: 8px;
       left: 8px;
     }
+    /* Badge de descuento estilo Amazon (-X%) */
     .card-badge.badge-descuento {
       top: 8px;
       right: 8px;
@@ -889,30 +688,6 @@
       border-radius: 4px;
       letter-spacing: 0.02em;
       box-shadow: 0 4px 12px rgba(230,57,26,0.45);
-    }
-    .card-badges-tl {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: flex-start;
-      pointer-events: none;
-      max-width: calc(100% - 16px);
-    }
-    .card-badges-tl .card-badge {
-      position: static;
-      top: auto; left: auto; right: auto; bottom: auto;
-      margin: 0;
-    }
-    .card-badge.badge-gorro {
-      background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
-      border: 1px solid rgba(255,255,255,0.35);
-      box-shadow: 0 3px 10px rgba(185,28,28,0.5);
-      color: #fff;
-      font-weight: 800;
     }
     .card-body {
       padding: 8px 12px 12px;
@@ -933,18 +708,23 @@
       min-height: 34px;
       cursor: pointer;
     }
+    /* Precio normal */
     .card-precio {
       font-size: 17px;
       font-weight: 800;
       color: var(--navy);
     }
+    /* Precio rebajado estilo Amazon */
     .card-precio-wrap {
       display: flex;
       align-items: baseline;
       gap: 6px;
       flex-wrap: wrap;
     }
-    .card-precio.rebajado { color: #c0392b; font-size: 18px; }
+    .card-precio.rebajado {
+      color: #c0392b;
+      font-size: 18px;
+    }
     .card-precio-original {
       font-size: 12px;
       font-weight: 500;
@@ -980,7 +760,10 @@
       gap: 5px;
       transition: all var(--transition);
     }
-    .card-pedir:hover { background: #25d366; transform: scale(1.02); }
+    .card-pedir:hover {
+      background: #25d366;
+      transform: scale(1.02);
+    }
     .card-pedir svg {
       width: 14px;
       height: 14px;
@@ -1005,7 +788,9 @@
       background: var(--gold-light);
       transform: scale(1.08);
     }
-    .card-add:active { transform: scale(0.92); }
+    .card-add:active {
+      transform: scale(0.92);
+    }
 
     /* ===== EMPTY ===== */
     .empty {
@@ -1038,7 +823,9 @@
       padding: 16px;
       animation: fadeIn 0.25s ease;
     }
-    .overlay.open { display: flex; }
+    .overlay.open {
+      display: flex;
+    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -1080,7 +867,9 @@
       transition: background var(--transition);
       z-index: 5;
     }
-    .modal-cerrar:hover { background: rgba(0,0,0,0.7); }
+    .modal-cerrar:hover {
+      background: rgba(0,0,0,0.7);
+    }
     .modal-img-wrap {
       width: 100%;
       background: #f8f9fa;
@@ -1105,7 +894,9 @@
       color: var(--text-muted);
       padding: 30px;
     }
-    .modal-body { padding: 16px 20px 24px; }
+    .modal-body {
+      padding: 16px 20px 24px;
+    }
     .modal-tag {
       font-size: 11px;
       font-weight: 700;
@@ -1133,7 +924,9 @@
       flex-wrap: wrap;
       margin-bottom: 10px;
     }
-    .modal-precio-wrap .modal-precio { margin-bottom: 0; }
+    .modal-precio-wrap .modal-precio {
+      margin-bottom: 0;
+    }
     .modal-precio-wrap .modal-precio.rebajado {
       color: #c0392b;
       font-size: 26px;
@@ -1177,10 +970,17 @@
       gap: 10px;
       transition: all var(--transition);
     }
-    .modal-pedir:hover { background: #1ebe5a; transform: scale(1.01); }
-    .modal-pedir svg { width: 18px; height: 18px; fill: currentColor; }
+    .modal-pedir:hover {
+      background: #1ebe5a;
+      transform: scale(1.01);
+    }
+    .modal-pedir svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
 
-    /* ===== CARRITO ===== */
+    /* ===== CARRITO LATERAL ===== */
     .cart-overlay {
       position: fixed;
       inset: 0;
@@ -1190,7 +990,9 @@
       align-items: flex-end;
       justify-content: center;
     }
-    .cart-overlay.open { display: flex; }
+    .cart-overlay.open {
+      display: flex;
+    }
     .cart-panel {
       background: #fff;
       width: 100%;
@@ -1220,7 +1022,9 @@
       border-radius: 6px;
       transition: background var(--transition);
     }
-    .cart-header .close:hover { background: var(--gray-bg); }
+    .cart-header .close:hover {
+      background: var(--gray-bg);
+    }
     .cart-body {
       flex: 1;
       overflow-y: auto;
@@ -1252,7 +1056,10 @@
       flex-shrink: 0;
       padding: 4px;
     }
-    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-info {
+      flex: 1;
+      min-width: 0;
+    }
     .cart-item-nombre {
       font-size: 13px;
       font-weight: 600;
@@ -1321,7 +1128,10 @@
       font-weight: 600;
       color: var(--text-secondary);
     }
-    .cart-buttons { display: flex; gap: 8px; }
+    .cart-buttons {
+      display: flex;
+      gap: 8px;
+    }
     .cart-buttons .btn {
       flex: 1;
       padding: 12px;
@@ -1344,9 +1154,11 @@
       background: var(--border-color);
       color: var(--text-secondary);
     }
-    .cart-buttons .btn-secondary:hover { background: #d0d4dc; }
+    .cart-buttons .btn-secondary:hover {
+      background: #d0d4dc;
+    }
 
-    /* ===== FORMULARIO ===== */
+    /* ===== FORMULARIO PEDIDO ===== */
     .order-form-overlay {
       position: fixed;
       inset: 0;
@@ -1357,7 +1169,9 @@
       justify-content: center;
       padding: 16px;
     }
-    .order-form-overlay.open { display: flex; }
+    .order-form-overlay.open {
+      display: flex;
+    }
     .order-form {
       background: #fff;
       width: 100%;
@@ -1379,7 +1193,9 @@
       color: var(--text-secondary);
       margin-bottom: 16px;
     }
-    .order-form .field { margin-bottom: 14px; }
+    .order-form .field {
+      margin-bottom: 14px;
+    }
     .order-form .field label {
       display: block;
       font-size: 12px;
@@ -1434,12 +1250,16 @@
       background: var(--navy);
       color: #fff;
     }
-    .order-form .actions .btn-primary:hover { background: var(--navy-light); }
+    .order-form .actions .btn-primary:hover {
+      background: var(--navy-light);
+    }
     .order-form .actions .btn-secondary {
       background: var(--border-color);
       color: var(--text-secondary);
     }
-    .order-form .actions .btn-secondary:hover { background: #d0d4dc; }
+    .order-form .actions .btn-secondary:hover {
+      background: #d0d4dc;
+    }
 
     /* ===== TOAST ===== */
     .toast-container {
@@ -1469,8 +1289,12 @@
       align-items: center;
       gap: 8px;
     }
-    .toast.success { background: #1a8a4a; }
-    .toast.error { background: #c0392b; }
+    .toast.success {
+      background: #1a8a4a;
+    }
+    .toast.error {
+      background: #c0392b;
+    }
     @keyframes toastIn {
       from { opacity: 0; transform: translateY(20px) scale(0.95); }
       to { opacity: 1; transform: translateY(0) scale(1); }
@@ -1502,7 +1326,9 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .landing-title .ico { font-size: 28px; }
+    .landing-title .ico {
+      font-size: 28px;
+    }
     .landing-sub {
       font-size: 14px;
       color: var(--text-secondary);
@@ -1524,7 +1350,9 @@
       border-bottom: 1px dashed var(--border-color);
       font-size: 13px;
     }
-    .grid-municipios .item:last-child { border-bottom: none; }
+    .grid-municipios .item:last-child {
+      border-bottom: none;
+    }
     .grid-municipios .municipio {
       font-weight: 600;
       color: var(--navy);
@@ -1544,7 +1372,11 @@
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       margin-top: 10px;
     }
-    .garantia-box ul { list-style: none; padding: 0; margin: 8px 0; }
+    .garantia-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0;
+    }
     .garantia-box ul li {
       padding: 4px 0 4px 24px;
       position: relative;
@@ -1580,18 +1412,6 @@
       color: rgba(255,255,255,0.7);
       padding: 32px 16px 20px;
       margin-top: 20px;
-      position: relative;
-    }
-    .site-footer::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #14532d, #e8b84a, #b91c1c, #e8b84a, #14532d);
-      background-size: 200% 100%;
-      animation: xmas-flow 7s linear infinite;
     }
     .footer-inner {
       max-width: 1200px;
@@ -1601,7 +1421,9 @@
       gap: 24px;
     }
     @media (min-width: 640px) {
-      .footer-inner { grid-template-columns: 1.5fr 1fr 1fr; }
+      .footer-inner {
+        grid-template-columns: 1.5fr 1fr 1fr;
+      }
     }
     .footer-col h4 {
       color: #fff;
@@ -1626,7 +1448,9 @@
       color: rgba(255,255,255,0.65);
       transition: color var(--transition);
     }
-    .footer-col a:hover { color: #fff; }
+    .footer-col a:hover {
+      color: #fff;
+    }
     .footer-bottom {
       max-width: 1200px;
       margin: 20px auto 0;
@@ -1640,60 +1464,194 @@
       gap: 6px 14px;
     }
 
-    /* ===== NIEVE ===== */
-    .xmas-snow {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 110;
-      overflow: hidden;
+    /* =====================================================
+       TEMA NAVIDEÑO · rojo festivo, verde pino claro, dorado y nieve
+       ===================================================== */
+    :root {
+      --navy: #c4162a;          /* rojo navideño (encabezado, botones activos) */
+      --navy-light: #dc2f43;
+      --gold: #e3a624;
+      --gold-light: #ffd36a;
+      --pine: #1e8f4e;          /* verde pino alegre */
+      --pine-dark: #14703c;
+      --pine-light: #2fae64;
+      --snow: #fffaf1;
+      --gray-bg: #faf6ef;       /* fondo cálido, tono nieve */
+      --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
     }
-    .xmas-snow-flake {
+    .hat-ico { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* Barra superior verde */
+    .util-bar {
+      background: var(--pine-dark);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    /* Encabezado rojo con luces navideñas */
+    .site-header {
+      background: linear-gradient(180deg, #d01c31 0%, #b5122a 100%);
+      padding-bottom: 8px;
+    }
+    .site-header::after {
+      content: "";
       position: absolute;
-      top: -30px;
-      color: #ffffff;
-      user-select: none;
-      will-change: transform;
-      animation-name: xmas-fall;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      text-shadow: 0 0 6px rgba(255,255,255,0.7);
+      left: 0; right: 0; bottom: 0;
+      height: 8px;
+      background-image:
+        radial-gradient(circle at 8px 4px,  #ffd36a 2.6px, transparent 3.2px),
+        radial-gradient(circle at 23px 4px, #ffffff 2.6px, transparent 3.2px),
+        radial-gradient(circle at 38px 4px, #4fe08a 2.6px, transparent 3.2px),
+        radial-gradient(circle at 53px 4px, #ffb3bd 2.6px, transparent 3.2px);
+      background-size: 60px 8px;
+      background-repeat: repeat-x;
+      pointer-events: none;
     }
-    @keyframes xmas-fall {
-      0% { transform: translateY(-30px) translateX(0) rotate(0deg); }
-      100% { transform: translateY(105vh) translateX(40px) rotate(360deg); }
+    .logo-sub { color: var(--gold-light); opacity: 1; }
+    .search-box button { background: var(--pine); }
+    .search-box button:hover { background: var(--pine-light); }
+    .search-box:focus-within { box-shadow: 0 0 0 2px var(--gold-light); }
+    .cart-badge { background: var(--gold); color: #3a2a00; border-color: #b5122a; }
+
+    /* Barra de confianza */
+    .trust-bar { background: #fff; border-bottom: 1px solid #f0e3cf; }
+    .trust-item svg { color: var(--pine); }
+
+    /* Anuncio principal: claro, nevado y alegre */
+    .nav-promo {
+      background:
+        radial-gradient(circle at 6% 28%, rgba(227,166,36,0.55) 2px, transparent 3px),
+        radial-gradient(circle at 15% 74%, rgba(30,143,78,0.35) 2px, transparent 3px),
+        radial-gradient(circle at 34% 20%, rgba(196,22,42,0.30) 2px, transparent 3px),
+        radial-gradient(circle at 58% 80%, rgba(227,166,36,0.45) 2px, transparent 3px),
+        radial-gradient(circle at 78% 24%, rgba(30,143,78,0.35) 2px, transparent 3px),
+        radial-gradient(circle at 92% 70%, rgba(196,22,42,0.30) 2px, transparent 3px),
+        linear-gradient(135deg, #fffaf1 0%, #fff3df 50%, #eaf7ee 100%);
+      border-bottom: 4px solid transparent;
+      border-image: repeating-linear-gradient(90deg,
+        var(--navy) 0 18px, #fff 18px 36px, var(--pine) 36px 54px, #fff 54px 72px) 1;
+      color: #2a2a2a;
     }
+    .nav-promo-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      text-align: left;
+    }
+    .nav-promo-icon {
+      width: 144px; height: 150px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-promo-icon svg {
+      width: 140px; height: 145px;
+      filter: drop-shadow(0 8px 10px rgba(20,112,60,0.28));
+    }
+    .nav-promo-kicker {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--pine);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .nav-promo h2 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.22;
+      color: #a8101f;
+      margin-bottom: 8px;
+    }
+    .nav-promo h2 em {
+      font-style: normal;
+      color: var(--pine-dark);
+      background: linear-gradient(transparent 62%, rgba(255,211,106,0.75) 62%);
+      padding: 0 4px;
+    }
+    .nav-promo p {
+      font-size: 15.5px;
+      line-height: 1.55;
+      color: #4a3f33;
+      max-width: 640px;
+    }
+    .nav-promo p strong { color: var(--pine-dark); font-weight: 700; }
+    @media (max-width: 640px) {
+      .nav-promo-inner { flex-direction: column; text-align: center; gap: 12px; padding: 18px 14px; }
+      .nav-promo-icon { width: 92px; height: 96px; }
+      .nav-promo-icon svg { width: 90px; height: 94px; }
+      .nav-promo h2 { font-size: 23px; }
+      .nav-promo p { font-size: 14px; }
+    }
+
+    /* Cinta verde en la parte superior de cada producto participante */
+    .card-regalo {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 8px;
+      background: linear-gradient(90deg, var(--pine-dark), var(--pine-light) 50%, var(--pine-dark));
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--gold-light);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .card-regalo .hat-ico { width: 17px; height: 17px; }
+    .card-con-regalo { border-color: var(--pine); }
+    .card-con-regalo:hover { border-color: var(--pine); box-shadow: 0 8px 30px rgba(30,143,78,0.22); }
+    .card-con-regalo .card-badge:not(.badge-sin-domicilio) { top: 40px; }
+
+    /* Aviso dentro del detalle del producto */
+    .modal-regalo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 4px 0 12px;
+      padding: 10px 12px;
+      background: #eaf7ee;
+      border: 1px solid var(--pine);
+      border-left: 5px solid var(--navy);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: #1f3d2b;
+      line-height: 1.4;
+    }
+    .modal-regalo .hat-ico { width: 30px; height: 30px; }
+    .modal-regalo strong { color: #a8101f; }
+
+    /* Acabados */
+    .seccion-header { border-bottom-color: rgba(30,143,78,0.35); }
+    .seccion-titulo { font-family: var(--serif); font-weight: 700; font-size: 21px; color: #a8101f; }
+    .cat-btn.active { box-shadow: 0 2px 10px rgba(196,22,42,0.3); }
+    .cats-arrow { background: var(--pine); }
+    .cats-arrow:hover:not(:disabled) { background: var(--pine-light); }
+    .site-footer { background: var(--pine-dark); }
+    .footer-bottom .felices { color: var(--gold-light); letter-spacing: 0.1em; font-weight: 700; }
   </style>
 </head>
 <body>
 
-<!-- ===== MARCO NAVIDEÑO (BORDES DE LA PÁGINA) ===== -->
-<div class="xmas-frame" aria-hidden="true">
-  <div class="xmas-bar xmas-bar-top" id="xmasBarTop"></div>
-  <div class="xmas-bar xmas-bar-bottom" id="xmasBarBottom"></div>
-  <div class="xmas-bar xmas-bar-left"></div>
-  <div class="xmas-bar xmas-bar-right"></div>
-  <span class="xmas-corner xmas-corner-tl">✦</span>
-  <span class="xmas-corner xmas-corner-tr">✦</span>
-  <span class="xmas-corner xmas-corner-bl">✦</span>
-  <span class="xmas-corner xmas-corner-br">✦</span>
-</div>
-
 <!-- ===== UTILITY BAR ===== -->
-<div class="util-bar">🎄 VENTACIEN · Todo lo que necesitas, cerca de ti · <strong>¡Felices Fiestas!</strong> 🎅</div>
-
-<!-- ===== ANUNCIO NAVIDEÑO ===== -->
-<div class="xmas-promo" id="xmasPromo">
-  <div class="xmas-promo-inner">
-    <span class="xmas-promo-ico">🎅</span>
-    <span class="xmas-promo-text">
-      <strong>¡Promo Navideña!</strong> En productos de <strong>más de $20 USD</strong> te llevás un <strong>gorro de Navidad gratis</strong> 🎁
-      <span class="xmas-promo-badge">Tiempo limitado</span>
-    </span>
-    <span class="xmas-promo-ico">🎄</span>
-  </div>
-  <button class="xmas-promo-close" id="xmasPromoClose" aria-label="Cerrar anuncio">✕</button>
-</div>
+<div class="util-bar">✦ FELICES FIESTAS · Gorro de Navidad de regalo en compras de más de 20 USD ✦</div>
 
 <!-- ===== HEADER ===== -->
 <header class="site-header">
@@ -1750,6 +1708,53 @@
   </div>
 </div>
 
+<!-- ===== ANUNCIO NAVIDAD ===== -->
+<section class="nav-promo" aria-label="Promoción de Navidad">
+  <div class="nav-promo-inner">
+    <div class="nav-promo-icon">
+      <svg viewBox="0 0 120 124" role="img" aria-label="Árbol de Navidad con regalos">
+        <defs>
+          <linearGradient id="gArbol" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#34b56c"/><stop offset="1" stop-color="#13693a"/>
+          </linearGradient>
+          <linearGradient id="gOro" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#e3a624"/>
+          </linearGradient>
+        </defs>
+        <rect x="53" y="100" width="14" height="13" rx="2" fill="#8a5a2b"/>
+        <path d="M60 26 L38 58 H82 Z" fill="url(#gArbol)" stroke="#0f5a31" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M60 44 L29 84 H91 Z" fill="url(#gArbol)" stroke="#0f5a31" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M60 64 L19 108 H101 Z" fill="url(#gArbol)" stroke="#0f5a31" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M33 92 Q60 104 87 90" fill="none" stroke="url(#gOro)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="1 5"/>
+        <path d="M42 68 Q60 76 78 66" fill="none" stroke="url(#gOro)" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 5"/>
+        <polygon points="60,6 62.9,13.7 71.1,14.1 64.7,19.2 66.9,27.1 60,22.6 53.1,27.1 55.3,19.2 48.9,14.1 57.1,13.7" fill="url(#gOro)" stroke="#c78a12" stroke-width="0.8" stroke-linejoin="round"/>
+        <circle cx="53" cy="48" r="3.4" fill="#d3202f"/>
+        <circle cx="68" cy="56" r="3.2" fill="#ffd36a"/>
+        <circle cx="48" cy="72" r="3.6" fill="#ffffff"/>
+        <circle cx="72" cy="76" r="3.6" fill="#d3202f"/>
+        <circle cx="60" cy="86" r="3.4" fill="#ffd36a"/>
+        <circle cx="36" cy="97" r="3.4" fill="#d3202f"/>
+        <circle cx="84" cy="97" r="3.4" fill="#ffffff"/>
+        <circle cx="60" cy="102" r="3.2" fill="#d3202f"/>
+        <rect x="6" y="100" width="26" height="20" rx="2" fill="#c4162a"/>
+        <rect x="17" y="100" width="4" height="20" fill="url(#gOro)"/>
+        <rect x="6" y="107" width="26" height="4" fill="url(#gOro)"/>
+        <path d="M19 100 c-6 -8 -9 -2 -3 0 M19 100 c6 -8 9 -2 3 0" fill="none" stroke="#e3a624" stroke-width="2" stroke-linecap="round"/>
+        <rect x="88" y="104" width="26" height="16" rx="2" fill="#e3a624"/>
+        <rect x="99" y="104" width="4" height="16" fill="#c4162a"/>
+        <rect x="88" y="110" width="26" height="3.5" fill="#c4162a"/>
+        <path d="M101 104 c-6 -8 -9 -2 -3 0 M101 104 c6 -8 9 -2 3 0" fill="none" stroke="#c4162a" stroke-width="2" stroke-linecap="round"/>
+        <g fill="#e3a624"><path d="M20 30 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6z"/><path d="M101 40 l1.3 3.2 3.2 1.3 -3.2 1.3 -1.3 3.2 -1.3 -3.2 -3.2 -1.3 3.2 -1.3z"/></g>
+      </svg>
+    </div>
+    <div class="nav-promo-text">
+      <span class="nav-promo-kicker">Promoción de Navidad</span>
+      <h2>En productos de más de <em>20 USD</em>, <br class="br-d">llévese un gorro de Navidad de regalo</h2>
+      <p>Identifique los productos participantes por la <strong>cinta verde</strong> en la parte superior de cada uno. Que esta Navidad llegue con lo mejor para su hogar y su familia.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ===== CATEGORÍAS ===== -->
 <div class="cats-wrap" id="catsWrap" style="display:none;">
   <button class="cats-arrow" id="catsArrowLeft" aria-label="Categorías anteriores">‹</button>
@@ -1802,8 +1807,9 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© <span id="anioActual"></span> VENTACIEN 🎄</span>
+    <span>© <span id="anioActual"></span> VENTACIEN</span>
     <span>Todos los pedidos se coordinan por WhatsApp</span>
+    <span class="felices">✦ FELICES FIESTAS ✦</span>
   </div>
 </footer>
 
@@ -1818,7 +1824,7 @@
       <h2 class="modal-nombre" id="mNombre"></h2>
       <div id="mPrecioWrap"></div>
       <div id="mDomicilio" style="font-size:13px;font-weight:600;margin-bottom:8px;"></div>
-      <div id="mGorro" style="font-size:13px;font-weight:600;margin-bottom:8px;display:none;"></div>
+      <div id="mRegalo"></div>
       <p class="modal-desc" id="mDesc"></p>
       <button class="modal-pedir" id="mPedir">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.85L.057 23.5l5.797-1.52A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.85 0-3.583-.497-5.073-1.365l-.363-.215-3.44.902.917-3.349-.236-.375A9.957 9.957 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
@@ -1854,7 +1860,7 @@
   </div>
 </div>
 
-<!-- ===== FORMULARIO ===== -->
+<!-- ===== FORMULARIO PEDIDO ===== -->
 <div class="order-form-overlay" id="orderFormOverlay">
   <div class="order-form" id="orderForm">
     <h3>📋 Completá tu pedido</h3>
@@ -1921,6 +1927,7 @@ const CATEGORIAS = [
   { id:"herramientas",       nombre:"Herramientas",              ico:"🔧" },
   { id:"automotriz",         nombre:"Automotriz y Medición",     ico:"🚗" },
   { id:"miscelaneos",        nombre:"Misceláneos y Hogar",       ico:"🏠" },
+  // NUEVAS CATEGORÍAS
   { id:"ecoflow",            nombre:"Ecoflow",                   ico:"⚡" },
   { id:"motorinas",          nombre:"Vehículos",      ico:"🛵" },
 ];
@@ -1929,10 +1936,10 @@ const WA_ICO = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentCol
 
 const IMG_PH_ICO = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`;
 
+// ============================================================
+//  CONFIG: DÍAS QUE DURA LA ETIQUETA "NUEVO"
+// ============================================================
 const DIAS_NUEVO = 7;
-
-// Promo navideña: gorro gratis para productos >= este precio en USD
-const PRECIO_MIN_GORRO_USD = 20;
 
 // ============================================================
 //  FUNCIONES AUXILIARES
@@ -1946,12 +1953,14 @@ function limpiarNombreParaOrdenar(nombre) {
     .toLowerCase();
 }
 
+// Detecta si un producto tiene descuento (precio_original > precio)
 function tieneDescuento(p){
   const po = parseFloat(p.precio_original);
   const pf = parseFloat(p.precio);
   return !isNaN(po) && !isNaN(pf) && po > pf && po > 0;
 }
 
+// Calcula el porcentaje de descuento (ej: 25)
 function porcentajeDescuento(p){
   if (!tieneDescuento(p)) return 0;
   const po = parseFloat(p.precio_original);
@@ -1959,16 +1968,9 @@ function porcentajeDescuento(p){
   return Math.round(((po - pf) / po) * 100);
 }
 
-function tieneGorroGratis(p){
-  const precioUSD = parseFloat(p.precio);
-  return !isNaN(precioUSD) && precioUSD >= PRECIO_MIN_GORRO_USD;
-}
-
-function hatBadgeHTML(p){
-  if (!tieneGorroGratis(p)) return "";
-  return `<div class="card-badge badge-gorro">🎅 Gorro gratis</div>`;
-}
-
+// ============================================================
+//  ETIQUETA "NUEVO" CON EXPIRACIÓN A LOS 7 DÍAS
+// ============================================================
 function esNuevo(p){
   if (!p || p.etiqueta !== "nuevo") return false;
   if (!p.fecha_agregado) return true;
@@ -2101,6 +2103,7 @@ function trackEvent(category, action, label, value){
   }
 }
 
+// Scroll a una sección compensando el header y la barra de categorías pegajosas
 function scrollToSeccion(id){
   const el = document.getElementById(id);
   if (!el) return;
@@ -2143,11 +2146,7 @@ function agregarAlCarrito(producto){
     carrito.push({ ...producto, cantidad: 1 });
   }
   guardarCarrito();
-  if (tieneGorroGratis(producto)) {
-    toast(`🎅 ${producto.nombre} agregado. ¡Incluye gorro de Navidad gratis!`);
-  } else {
-    toast(`✅ ${producto.nombre} agregado al carrito`);
-  }
+  toast(`✅ ${producto.nombre} agregado al carrito`);
   trackEvent('Carrito', 'add_to_cart', producto.nombre, parseFloat(producto.precio));
 }
 
@@ -2619,6 +2618,21 @@ function renderizarContenido(){
 }
 
 // ============================================================
+//  PROMOCIÓN NAVIDAD: gorro de regalo en productos de más de 20 USD
+// ============================================================
+const UMBRAL_REGALO_USD = 20;
+const HAT_ICO = '<svg class="hat-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.5C5 9 10 4.5 17 5.5c1.6 2.4 2.6 6.6 3 12z" fill="#d13b4d"/><rect x="2.5" y="16" width="19" height="4.6" rx="2.3" fill="#faf6ec"/><circle cx="18.6" cy="5" r="2.4" fill="#faf6ec"/></svg>';
+
+function tieneRegalo(p){
+  const v = parseFloat(p.precio);
+  return !isNaN(v) && v > UMBRAL_REGALO_USD;
+}
+function regaloCintaHTML(p){
+  if (!tieneRegalo(p)) return "";
+  return `<div class="card-regalo">${HAT_ICO}<span>Gorro navideño de regalo</span></div>`;
+}
+
+// ============================================================
 //  RENDER CATÁLOGO
 // ============================================================
 function badgeHTML(p){
@@ -2647,17 +2661,17 @@ function cardHTML(p, idx, mostrarTag=false){
   const hasImg = p.imagen && p.imagen.length > 0;
   const imgSrc = hasImg ? p.imagen : "";
   const rebajadoClass = tieneDescuento(p) ? " card-rebajado" : "";
-  const gorroClass = tieneGorroGratis(p) ? " card-gorro" : "";
-  const badgesTL = `${badgeHTML(p)}${hatBadgeHTML(p)}`;
+  const regaloClass = tieneRegalo(p) ? " card-con-regalo" : "";
   const imgWrap = `<div class="card-img-wrap">
-    ${badgesTL ? `<div class="card-badges-tl">${badgesTL}</div>` : ''}
+    ${regaloCintaHTML(p)}
+    ${badgeHTML(p)}
     ${descuentoBadgeHTML(p)}
     ${domicilioBadgeHTML(p)}
     ${hasImg ? `<img src="${imgSrc}" alt="${p.nombre}" loading="lazy" decoding="async" data-idx="${idx}" onerror="this.style.display='none'; this.parentElement.querySelector('.card-img-ph').style.display='flex';">` : ''}
     <div class="card-img-ph" style="display:${hasImg ? 'none' : 'flex'};" data-idx="${idx}">${IMG_PH_ICO}<span>Sin foto</span></div>
   </div>`;
 
-  return `<article class="card${rebajadoClass}${gorroClass}">
+  return `<article class="card${rebajadoClass}${regaloClass}">
     ${imgWrap}${tag}
     <div class="card-body">
       <div class="card-nombre" data-idx="${idx}">${p.nombre}</div>
@@ -2864,13 +2878,9 @@ function abrirModal(p){
     domEl.innerHTML = '✅ <span style="color:#1a8a4a;">Domicilio gratis disponible</span>';
   }
 
-  const gorroEl = document.getElementById("mGorro");
-  if (tieneGorroGratis(p)) {
-    gorroEl.style.display = "block";
-    gorroEl.innerHTML = '🎅 <span style="color:#b91c1c;font-weight:800;">¡Incluye gorro de Navidad gratis!</span>';
-  } else {
-    gorroEl.style.display = "none";
-  }
+  document.getElementById("mRegalo").innerHTML = tieneRegalo(p)
+    ? `<div class="modal-regalo">${HAT_ICO}<div><strong>Regalo de Navidad:</strong> este producto incluye un gorro de Navidad.</div></div>`
+    : "";
 
   const hasImg = p.imagen && p.imagen.length > 0;
   const imgSrc = hasImg ? p.imagen : "";
@@ -2937,7 +2947,7 @@ if (window.caches) {
 // ============================================================
 function cargarProductos(){
   const url = "productos.json?_=" + Date.now();
-  fetch(url, {
+  fetch(url, { 
     cache: "no-store",
     headers: { "Cache-Control": "no-cache" }
   })
@@ -2988,85 +2998,10 @@ document.getElementById("footerWA").addEventListener("click", e=>{ e.preventDefa
 document.getElementById("headerContact").addEventListener("click", ()=>openWA("Hola, quisiera más información sobre sus productos."));
 
 // ============================================================
-//  ANUNCIO NAVIDEÑO (CERRAR)
-// ============================================================
-(function initXmasPromo(){
-  const promo = document.getElementById("xmasPromo");
-  const closeBtn = document.getElementById("xmasPromoClose");
-  if (!promo) return;
-  try {
-    if (sessionStorage.getItem("xmas_promo_cerrado") === "1") {
-      promo.style.display = "none";
-      return;
-    }
-  } catch(e){}
-  closeBtn.addEventListener("click", () => {
-    promo.style.display = "none";
-    try { sessionStorage.setItem("xmas_promo_cerrado", "1"); } catch(e){}
-  });
-})();
-
-// ============================================================
-//  LUCES NAVIDEÑAS EN EL MARCO
-// ============================================================
-function generarLucesNavidad(){
-  const colores = ['#ff4136', '#ffdc00', '#2ecc40', '#0074d9', '#f012be', '#ff851b'];
-  const esMovil = window.innerWidth < 480;
-  const cantidad = esMovil ? 16 : 34;
-
-  ['xmasBarTop', 'xmasBarBottom'].forEach(id => {
-    const bar = document.getElementById(id);
-    if (!bar) return;
-    // Limpiar luces anteriores
-    bar.querySelectorAll('.xmas-light').forEach(l => l.remove());
-    for (let i = 0; i < cantidad; i++) {
-      const luz = document.createElement('span');
-      luz.className = 'xmas-light';
-      luz.style.setProperty('--xmas-color', colores[i % colores.length]);
-      luz.style.animationDelay = (Math.random() * 1.8).toFixed(2) + 's';
-      bar.appendChild(luz);
-    }
-  });
-}
-
-// Regenerar luces al cambiar el tamaño de la ventana
-let _resizeLucesTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(_resizeLucesTimer);
-  _resizeLucesTimer = setTimeout(generarLucesNavidad, 220);
-});
-
-// ============================================================
-//  NIEVE NAVIDEÑA
-// ============================================================
-function iniciarNieve(){
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cont = document.createElement('div');
-  cont.className = 'xmas-snow';
-  cont.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(cont);
-  const iconos = ['❄', '❅', '❆', '✻', '•'];
-  const total = 24;
-  for (let i = 0; i < total; i++) {
-    const copo = document.createElement('span');
-    copo.className = 'xmas-snow-flake';
-    copo.textContent = iconos[Math.floor(Math.random() * iconos.length)];
-    copo.style.left = (Math.random() * 100) + 'vw';
-    copo.style.fontSize = (7 + Math.random() * 15) + 'px';
-    copo.style.opacity = (0.35 + Math.random() * 0.55).toFixed(2);
-    copo.style.animationDuration = (9 + Math.random() * 14) + 's';
-    copo.style.animationDelay = (-Math.random() * 20) + 's';
-    cont.appendChild(copo);
-  }
-}
-
-// ============================================================
 //  INICIO
 // ============================================================
 cargarCarrito();
 cargarProductos();
-iniciarNieve();
-generarLucesNavidad();
 </script>
 </body>
 </html>
