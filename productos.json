@@ -338,6 +338,7 @@
     "etiqueta": "",
     "agotado": false,
     "domicilio_gratis": true,
+    "regalo_navideno": true,
     "imagen": "imagenes/Hornilla-electrica-16usd.jpg"
   },
   {
@@ -1956,6 +1957,7 @@
     "etiqueta": "nuevo",
     "agotado": false,
     "domicilio_gratis": true,
+    "regalo_navideno": false,
     "imagen": "imagenes/Bateria-128V-290usd-2.jpg",
     "precio_original": "290",
     "fecha_agregado": "2026-10-07"
