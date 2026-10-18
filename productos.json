@@ -62,8 +62,11 @@
     "precio": "10",
     "moneda": "USD",
     "descripcion": "🛡️ Garantía 72 horas",
-    "imagen": "imagenes/Protectores-voltaje-10usd.jpg",
-    "agotado": false
+    "etiqueta": "",
+    "agotado": false,
+    "domicilio_gratis": true,
+    "regalo_navideno": true,
+    "imagen": "imagenes/Protectores-voltaje-10usd.jpg"
   },
   {
     "id": "p_1783046977069",
